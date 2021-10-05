@@ -16,5 +16,6 @@ services:
     ports:
       - 8002:80
     volumes:
-      - ./data:/data
+      - ./data:/data:ro
+      # - ./__config.php:/var/www/html/__config.php:ro
     restart: always
