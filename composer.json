@@ -1,4 +1,7 @@
 {
+    "name": "mkaraki/narourb-webview",
+    "description": "Narou.rb downloaded data viewer",
+    "license": "MIT",
     "require": {
         "symfony/yaml": "^5.3"
     }
