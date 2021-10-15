@@ -1,3 +1,7 @@
 .novelview p {
     margin-bottom: 0;
 }
+
+.reader-container {
+    max-width: 700px;
+}
