@@ -5,3 +5,4 @@ $narounoveldir = $naroudir . DIRECTORY_SEPARATOR  . '小説データ';
 
 $apiclient_update_url = $apiendpoint . '/api/update';
 $apiclient_add_url = $apiendpoint . '/api/download';
+$apiclient_list_url = $apiendpoint . '/api/list';
