@@ -7,10 +7,15 @@ function loadYaml($path)
     return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($path));
 }
 
-function loadIndex()
+function loadIndex($useapi = false)
 {
-    global $naroudbyaml;
-    return loadYaml($naroudbyaml);
+    global $naroudbyaml, $apiclient_list_url, $apiclient;
+    if (!$useapi || !$apiclient) {
+        return loadYaml($naroudbyaml);
+    } else {
+        $json = file_get_contents($apiclient_list_url);
+        return json_decode($json, true)['data'];
+    }
 }
 
 function loadToc($id, $loadedindex = null)
