@@ -32,7 +32,7 @@ function cmpindex($a, $b)
             foreach ($index as $content) {
                 print('<tr>');
                 print(generateTdHtml('<a href="index.php?v=novel&nid=' . $content['id'] . '">' . htmlxss($content['title']) . '</a>', ''));
-                print(generateTd(date('Y/m/d H:i:s', $content['novelupdated_at'] ?? $content['last_update'])));
+                print(generateTd(date('Y/m/d H:i:s', $content['novelupdated_at'] ?? $content['general_lastup'])));
                 print(generateTd($content['author']));
                 print(generateTdHtml('<a href="' . $content['toc_url'] . '">' . htmlxss($content['sitename']) . '</a>', ''));
                 print('</tr>');
