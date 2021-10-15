@@ -13,7 +13,7 @@ $prevurl = "index.php?v=read&sid=$prevcode&nid=$nid";
 $nexturl = "index.php?v=read&sid=$nextcode&nid=$nid";
 $novelurl = "index.php?v=novel&nid=$nid";
 ?>
-<div class="container">
+<div class="container p-4">
     <div class="row">
         <div class="col">
             <div class="text-center">
