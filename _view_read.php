@@ -39,12 +39,16 @@ $novelurl = "index.php?v=novel&nid=$nid";
         </div>
     </div>
     <div class="row">
-        <div class="col readnav text-center">
+        <div class="col-4 text-center">
             <?php
             if ($prevcode >= 0)
                 print('<a href="' . $prevurl . '">前へ</a>');
             ?>
+        </div>
+        <div class="col-4 text-center">
             <a href="<?= $novelurl ?>">目次</a>
+        </div>
+        <div class="col-4 text-center">
             <?php
             if ($nextcode < count($toc['subtitles']))
                 print('<a href="' . $nexturl . '">次へ</a>');
