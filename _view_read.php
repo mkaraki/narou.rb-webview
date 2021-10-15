@@ -20,17 +20,13 @@ $content = loadContent($_GET['sid'], $_GET['nid'], $toc, $ind);
     </div>
     <div class="row">
         <div class="col">
-            <?php
-            if (isset($content['element']['introduction']))
-                echo '<div class="novelview novelintro">' . $content['element']['introduction'] . '</div><hr />';
-            ?>
+            <div class="novelview novelintro"><?= $content['element']['introduction'] ?></div>
+            <hr />
             <div class="novelview body">
                 <?= $content['element']['body'] ?>
             </div>
-            <?php
-            if (isset($content['element']['postscript']))
-                echo '<hr /><div class="novelview novelpost">' . $content['element']['postscript'] . '</div>';
-            ?>
+            <hr />
+            <div class="novelview novelpost"><?= $content['element']['postscript'] ?></div>
         </div>
     </div>
 </div>
