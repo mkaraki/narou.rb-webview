@@ -11,13 +11,14 @@ require_once('_postconfig.php');
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.php?v=list">小説一覧</a>
+                    <a class="nav-link" href="index.php?v=list">小説一覧</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.php?v=list&s=novelupdated_at&sd=desc">更新一覧</a>
+                    <a class="nav-link" href="index.php?v=list&s=novelupdated_at&sd=desc">更新一覧</a>
                 </li>
                 <?php
                 if ($apiclient === true) require('_viewitem_apiclientmenu.php');
+                if ($siteentry === 'read') require('_viewitem_colorselector.php');
                 ?>
             </ul>
         </div>
