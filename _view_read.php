@@ -1,8 +1,17 @@
 <?php
 require_once '_yamlmetadataloader.php';
+$sid = intval($_GET['sid']);
+$nid = $_GET['nid'];
+
 $ind = loadIndex();
 $toc = loadToc($_GET['nid'], $ind);
-$content = loadContent($_GET['sid'], $_GET['nid'], $toc, $ind);
+$content = loadContent($sid, $_GET['nid'], $toc, $ind);
+
+$prevcode = $sid - 1;
+$nextcode = $sid + 1;
+$prevurl = "index.php?v=read&sid=$prevcode&nid=$nid";
+$nexturl = "index.php?v=read&sid=$nextcode&nid=$nid";
+$novelurl = "index.php?v=novel&nid=$nid";
 ?>
 <div class="container">
     <div class="row">
@@ -27,6 +36,19 @@ $content = loadContent($_GET['sid'], $_GET['nid'], $toc, $ind);
             </div>
             <hr />
             <div class="novelview novelpost"><?= $content['element']['postscript'] ?></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col readnav text-center">
+            <?php
+            if ($prevcode >= 0)
+                print('<a href="' . $prevurl . '">前へ</a>');
+            ?>
+            <a href="<?= $novelurl ?>">目次</a>
+            <?php
+            if ($nextcode < count($toc['subtitles']))
+                print('<a href="' . $nexturl . '">次へ</a>');
+            ?>
         </div>
     </div>
 </div>
