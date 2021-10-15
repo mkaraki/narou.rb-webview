@@ -1,3 +1,7 @@
 .novelview p {
     margin-bottom: 0;
 }
+
+.readnav a {
+    margin: 0 15px;
+}
