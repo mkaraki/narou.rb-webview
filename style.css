@@ -5,3 +5,7 @@
 .reader-container {
     max-width: 700px;
 }
+
+a:visited {
+    color: palevioletred;
+}
