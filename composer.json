@@ -4,5 +4,8 @@
     "license": "MIT",
     "require": {
         "symfony/yaml": "^5.3"
+    },
+    "require-dev": {
+        "vimeo/psalm": "^4.10"
     }
 }

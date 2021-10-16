@@ -1,3 +1,4 @@
 /vendor/
 composer.lock
 __config.php
+psalm.xml
