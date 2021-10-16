@@ -13,9 +13,17 @@ require_once('_postconfig.php');
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?v=updated">更新一覧</a>
                 </li>
-                <?php
-                if ($apiclient === true) require('_viewitem_apiclientmenu.php');
-                ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownApi" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        データ管理
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownApi">
+                        <li><a class="dropdown-item" href="index.php?v=list&s=general_lastup&sd=desc">更新順一覧</a></li>
+                        <?php
+                        if ($apiclient === true) require('_viewitem_apiclientmenu.php');
+                        ?>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?v=conf">設定</a>
                 </li>

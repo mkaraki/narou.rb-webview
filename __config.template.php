@@ -7,3 +7,4 @@ $apiclient = true;
 $apiendpoint = 'http://localhost:8000';
 
 $allow_readserverconf = false;
+$allow_manualupdate = false;
