@@ -1,7 +1,7 @@
 <?php
 require_once '_yamlmetadataloader.php';
 $sid = intval($_GET['sid']);
-$nid = $_GET['nid'];
+$nid = intval($_GET['nid']);
 
 $ind = loadIndex();
 $toc = loadToc($_GET['nid'], $ind);
