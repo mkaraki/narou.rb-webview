@@ -16,5 +16,5 @@ function generateTdHtml(string $innerHtml, string $attr = ''): string
 
 function generateATag(string $href, string $innerHtml, string $attr = ''): string
 {
-    return '<a href="' . $href . '"' . " $attr>" . "$innerHtml</a>";
+    return '<a href="' . htmlxss($href) . '"' . " $attr>" . "$innerHtml</a>";
 }

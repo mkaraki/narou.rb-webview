@@ -1,7 +1,7 @@
 <?php
 require_once '_yamlmetadataloader.php';
 $sid = intval($_GET['sid']);
-$nid = $_GET['nid'];
+$nid = intval($_GET['nid']);
 
 $ind = loadIndex();
 $toc = loadToc($_GET['nid'], $ind);
@@ -12,8 +12,10 @@ $nextcode = $sid + 1;
 $prevurl = "index.php?v=read&sid=$prevcode&nid=$nid";
 $nexturl = "index.php?v=read&sid=$nextcode&nid=$nid";
 $novelurl = "index.php?v=novel&nid=$nid";
+
+$maxwid = intval($_COOKIE['readermaxwid'] ?? 700);
 ?>
-<div class="container p-4" style="max-width: <?= $_COOKIE['readermaxwid'] ?? 700; ?>px;">
+<div class="container p-4" style="max-width: <?= $maxwid ?>px;">
     <div class="row">
         <div class="col">
             <div class="text-center">
