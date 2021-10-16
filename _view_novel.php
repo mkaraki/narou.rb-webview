@@ -41,7 +41,10 @@ $toc = loadToc($nid);
                 if (!empty($content['subchapter']))
                     print('<tr><td colspan="3">' . $content['subchapter'] . '</td></tr>');
                 print('<tr>');
-                print(generateTdHtml(generateATag("index.php?v=read&sid=$id&nid=$nid", htmlxss($content['subtitle']), 'id="s-' . $id . '"')));
+                print(generateTdHtml(
+                    generateATag("index.php?v=read&sid=$id&nid=$nid", htmlxss($content['subtitle']), 'id="' . $id . '"') .
+                        (($_COOKIE["bm-$nid"] ?? -1) === "$id" ? ' 🔖' : '')
+                ));
                 print(generateTd($content['subdate']));
                 print(generateTd($content['subupdate']));
                 print('</tr>');
@@ -51,11 +54,3 @@ $toc = loadToc($nid);
     </table>
     <span><?= count($toc['subtitles']); ?>件の項目</span>
 </div>
-
-<script src="script.bookmark.js"></script>
-<script src="script.novel.js"></script>
-<script>
-    window.onload = function() {
-        bookmarkApply(<?= $nid; ?>);
-    }
-</script>
