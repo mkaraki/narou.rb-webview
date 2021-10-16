@@ -2,7 +2,7 @@
 require_once('_postconfig.php');
 
 ?>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg" id="navbar">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php">Narou.rb Web Viewer</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,8 +15,10 @@ require_once('_postconfig.php');
                 </li>
                 <?php
                 if ($apiclient === true) require('_viewitem_apiclientmenu.php');
-                if ($siteentry === 'read') require('_viewitem_colorselector.php');
                 ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?v=conf">設定</a>
+                </li>
             </ul>
         </div>
     </div>

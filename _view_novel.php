@@ -7,7 +7,7 @@ $toc = loadToc($nid);
 ?>
 <div>
     <div class="metadatas">
-        <div class="container">
+        <div class="container p-4">
             <div class="row">
                 <div class="col">
                     <div class="text-center">
