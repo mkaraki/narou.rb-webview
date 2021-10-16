@@ -16,7 +16,7 @@ function setColor(cid) {
             break;
 
         case 2:
-            bg = '#ffb570';
+            bg = '#ffe1c2';
             fg = 'black';
             navclass += 'navbar-light bg-light'
             break;
