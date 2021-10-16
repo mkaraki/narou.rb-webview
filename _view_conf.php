@@ -75,11 +75,12 @@ require_once '_postconfig.php';
                         <button type="button" class="btn btn-danger" onclick="doImportConf();">設定をインポートする</button>
                         <br />
                     </div>
-                    <div id="exportconf" class="d-none">
+                    <div id="exportconf" class="d-none bg-white p-2">
                         <br />
-                        <div class="input-group">
+                        <div class="input-group" id="econfboxh">
                             <textarea class="form-control" id="econfbox"></textarea>
                         </div>
+                        <p><a href="javascript:void(0)" onclick="gen2dCode();">2次元コードに変換</a></p>
                     </div>
                     <br />
                 </div>
@@ -103,6 +104,8 @@ require_once '_postconfig.php';
     </form>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js" integrity="sha512-6ORWJX/LrnSjBzwefdNUyLCMTIsGoNP6NftMy2UAm1JBm6PRZCO1d7OHBStWpVFZLO+RerTvqX/Z9mBFfCJZ4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js" integrity="sha512-NFUcDlm4V+a2sjPX7gREIXgCSFja9cHtKPOL1zj6QhnE0vcY695MODehqkaGYTLyL2wxe/wtr4Z49SvqXq12UQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="script.conf.js"></script>
 <script>
     document.getElementById('loadscr').classList.remove('d-none');

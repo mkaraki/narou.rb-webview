@@ -67,3 +67,12 @@ function exportConf() {
     document.getElementById('econfbox').value = JSON.stringify(Cookies.get());
     document.getElementById('exportconf').classList.remove('d-none');
 }
+
+let gen2dcode = false;
+function gen2dCode() {
+    if (gen2dcode) return;
+    const be = document.getElementById('econfbox');
+    jQuery('#econfboxh').qrcode({ width: 350, height: 350, text: be.value });
+    be.remove();
+    gen2dcode = true;
+}
