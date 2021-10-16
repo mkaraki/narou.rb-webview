@@ -1,10 +1,8 @@
 FROM composer AS installdep
 
+COPY * /app/
+
 COPY --from=composer /usr/bin/composer /usr/bin/composer
-
-RUN git clone https://github.com/mkaraki/narou.rb-webview.git /app
-
-WORKDIR /app
 
 RUN composer install
 
