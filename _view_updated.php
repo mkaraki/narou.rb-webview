@@ -6,13 +6,13 @@ $index = loadIndex(true);
 $sort = 'general_lastup';
 $asc = 'desc';
 
-function cmpindex($a, $b)
+function cmpindex(array $a, array $b): int
 {
     global $sort, $asc;
     if ($a[$sort] == $b[$sort]) {
         return 0;
     }
-    return ($a[$sort] < $b[$sort]) ? ($asc ? -1 : 1) : ($asc ? 1 : -1);
+    return ($a[$sort] < $b[$sort]) ? -1 : 1;
 }
 
 ?>
