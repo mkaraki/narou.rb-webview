@@ -25,7 +25,7 @@ $toc = loadToc($nid);
             </div>
         </div>
     </div>
-    <table data-toggle="table" class="table table-striped">
+    <table data-toggle="table" class="table table-striped <?= $_COOKIE['gcolorset'] === '1' ?  'table-dark' : ''; ?>">
         <thead>
             <tr>
                 <th>タイトル</th>
@@ -41,8 +41,7 @@ $toc = loadToc($nid);
                 if (!empty($content['subchapter']))
                     print('<tr><td colspan="3">' . $content['subchapter'] . '</td></tr>');
                 print('<tr>');
-                $readurl = "index.php?v=read&sid=$id&nid=$nid";
-                print(generateTdHtml('<a href="' . $readurl . '">' . htmlxss($content['subtitle']) . '</a>'));
+                print(generateTdHtml(generateATag("index.php?v=read&sid=$id&nid=$nid", htmlxss($content['subtitle']), 'id="s-' . $id . '"')));
                 print(generateTd($content['subdate']));
                 print(generateTd($content['subupdate']));
                 print('</tr>');
@@ -52,3 +51,11 @@ $toc = loadToc($nid);
     </table>
     <span><?= count($toc['subtitles']); ?>件の項目</span>
 </div>
+
+<script src="script.bookmark.js"></script>
+<script src="script.novel.js"></script>
+<script>
+    window.onload = function() {
+        bookmarkApply(<?= $nid; ?>);
+    }
+</script>

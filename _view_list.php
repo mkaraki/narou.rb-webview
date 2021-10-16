@@ -17,7 +17,7 @@ function cmpindex($a, $b)
 
 ?>
 <div>
-    <table data-toggle="table" class="table table-striped">
+    <table data-toggle="table" class="table table-striped <?= $_COOKIE['gcolorset'] === '1' ?  'table-dark' : ''; ?>">
         <thead>
             <tr>
                 <th>タイトル</th>
@@ -31,10 +31,10 @@ function cmpindex($a, $b)
             usort($index, 'cmpindex');
             foreach ($index as $content) {
                 print('<tr>');
-                print(generateTdHtml('<a href="index.php?v=novel&nid=' . $content['id'] . '">' . htmlxss($content['title']) . '</a>'));
+                print(generateTdHtml(generateATag('index.php?v=novel&nid=' . $content['id'], htmlxss($content['title']))));
                 print(generateTd(date('Y/m/d H:i:s', $content['general_lastup'])));
                 print(generateTd($content['author']));
-                print(generateTdHtml('<a href="' . $content['toc_url'] . '">' . htmlxss($content['sitename']) . '</a>'));
+                print(generateTdHtml(generateATag($content['toc_url'], htmlxss($content['sitename']))));
                 print('</tr>');
             }
             ?>

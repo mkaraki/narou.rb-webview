@@ -2,7 +2,7 @@
 require_once('_postconfig.php');
 
 ?>
-<nav class="navbar navbar-expand-lg navbar-light bg-light" id="navbar">
+<nav class="navbar navbar-expand-lg <?= $_COOKIE['gcolorset'] === '1' ?  'navbar-dark bg-dark' : 'navbar-light bg-light'; ?>" id="navbar">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php">Narou.rb Web Viewer</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

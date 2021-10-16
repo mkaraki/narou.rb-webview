@@ -13,3 +13,8 @@ function generateTdHtml($innerHtml, $attr = '')
 {
     return "<td $attr>" . $innerHtml . '</td>';
 }
+
+function generateATag($href, $innerHtml, $attr = '')
+{
+    return '<a href="' . $href . '"' . " $attr>" . "$innerHtml</a>";
+}

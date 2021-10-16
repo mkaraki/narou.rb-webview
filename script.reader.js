@@ -30,3 +30,26 @@ function applyReaderConfig() {
     document.getElementById('reader-container').style.maxWidth = (Cookies.get('readermaxwid') ?? '700') + 'px';
     setColor(parseInt(Cookies.get('colorset') ?? '0'));
 }
+
+const bmarkElem = document.getElementById('addBmark');
+
+function disableBmark() {
+    bmarkElem.ariaDisabled = true;
+    bmarkElem.removeAttribute('href');
+    bmarkElem.innerText = '保存済み';
+}
+
+function bookmarkCheck(nid, sid, applybtn = false) {
+    if (!checkBookmarked(nid, sid)) return false;
+    else if (!applybtn) return true;
+    else {
+        disableBmark();
+        return true;
+    }
+}
+
+function bookmarkAdd(nid, sid) {
+    if (bmarkElem.ariaDisabled === true) return;
+    setBookmark(nid, sid);
+    disableBmark();
+}
