@@ -42,7 +42,7 @@ $toc = loadToc($nid);
                     print('<tr><td colspan="3">' . $content['subchapter'] . '</td></tr>');
                 print('<tr>');
                 $readurl = "index.php?v=read&sid=$id&nid=$nid";
-                print(generateTdHtml('<a href="' . $readurl . '">' . htmlxss($content['subtitle']) . '</a>', ''));
+                print(generateTdHtml('<a href="' . $readurl . '">' . htmlxss($content['subtitle']) . '</a>'));
                 print(generateTd($content['subdate']));
                 print(generateTd($content['subupdate']));
                 print('</tr>');
