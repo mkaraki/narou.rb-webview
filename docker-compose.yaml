@@ -12,7 +12,8 @@ services:
     restart: always
 
   webview:
-    image: ghcr.io/mkaraki/narou.rb-webview:main
+    build: .
+    #image: ghcr.io/mkaraki/narou.rb-webview:latest
     ports:
       - 8002:80
     volumes:
