@@ -52,7 +52,7 @@ require_once '_postconfig.php';
                 <div class="col">
                     <div>
                         <button type="submit" class="btn btn-primary mb-3">設定を保存</button>
-                        <button class="btn btn-danger mb-3" onclick="location.reload();">設定を破棄</button>
+                        <button class="btn btn-danger mb-3" onclick="location.reload(); return false;">設定を破棄</button>
                     </div>
                     <hr />
                 </div>
