@@ -3,8 +3,8 @@ require_once '_yamlmetadataloader.php';
 require_once '_funcs.php';
 $index = loadIndex(true);
 
-$sort = $_GET['s'] ?? 'title';
-$asc = ($_GET['sd'] ?? 'asc') !== 'desc';
+$sort = 'general_lastup';
+$asc = 'desc';
 
 function cmpindex($a, $b)
 {
@@ -15,15 +15,6 @@ function cmpindex($a, $b)
     return ($a[$sort] < $b[$sort]) ? ($asc ? -1 : 1) : ($asc ? 1 : -1);
 }
 
-function generateNewbadge($nid, $tno)
-{
-    if (!isset($_COOKIE["bm-$nid"])) return;
-    $bsid = intval($_COOKIE["bm-$nid"]);
-
-    if ($bsid + 1 < $tno) return '<span class="badge bg-primary">New</span>';
-    else return '';
-}
-
 ?>
 <div>
     <table data-toggle="table" class="table table-striped <?= $_COOKIE['gcolorset'] === '1' ?  'table-dark' : ''; ?>">
@@ -32,25 +23,22 @@ function generateNewbadge($nid, $tno)
                 <th>タイトル</th>
                 <th>更新日</th>
                 <th>作者</th>
-                <th>掲載サイト</th>
             </tr>
         </thead>
         <tbody>
             <?php
             usort($index, 'cmpindex');
             foreach ($index as $content) {
+                if (!isset($_COOKIE["bm-" . $content['id']])) continue;
                 print('<tr>');
                 print(generateTdHtml(
-                    generateATag('index.php?v=novel&nid=' . $content['id'], htmlxss($content['title'])) .
-                        generateNewbadge($content['id'], $content['general_all_no'])
+                    generateATag('index.php?v=novel&nid=' . $content['id'], htmlxss($content['title']))
                 ));
                 print(generateTd(date('Y/m/d H:i:s', $content['general_lastup'])));
                 print(generateTd($content['author']));
-                print(generateTdHtml(generateATag($content['toc_url'], htmlxss($content['sitename']))));
                 print('</tr>');
             }
             ?>
         </tbody>
     </table>
-    <span><?= count($index); ?>件の項目</span>
 </div>
