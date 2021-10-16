@@ -13,7 +13,7 @@ $prevurl = "index.php?v=read&sid=$prevcode&nid=$nid";
 $nexturl = "index.php?v=read&sid=$nextcode&nid=$nid";
 $novelurl = "index.php?v=novel&nid=$nid";
 ?>
-<div class="container p-4" id="reader-container">
+<div class="container p-4" style="max-width: <?= $_COOKIE['readermaxwid'] ?? 700; ?>;">
     <div class="row">
         <div class="col">
             <div class="text-center">

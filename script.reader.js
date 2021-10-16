@@ -27,7 +27,6 @@ function setColor(cid) {
 }
 
 function applyReaderConfig() {
-    document.getElementById('reader-container').style.maxWidth = (Cookies.get('readermaxwid') ?? '700') + 'px';
     setColor(parseInt(Cookies.get('colorset') ?? '0'));
 }
 
