@@ -24,6 +24,9 @@ function setGColor(cid) {
     document.getElementById('navbar').setAttribute('class', navclass);
 }
 
-function applyGeneralSettings() {
+function applyGeneralColorSettings() {
     setGColor(parseInt(Cookies.get('gcolorset') ?? '0'));
+}
+
+function applyGeneralSettings() {
 }
