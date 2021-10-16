@@ -56,3 +56,4 @@ $novelurl = "index.php?v=novel&nid=$nid";
         </div>
     </div>
 </div>
+<script src="script.reader.js"></script>
