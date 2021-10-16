@@ -39,10 +39,11 @@ function generateNewbadge(int $nid, int $tno): string
             <?php
             usort($index, 'cmpindex');
             foreach ($index as $content) {
+                $nid = (int)$content;
                 print('<tr>');
                 print(generateTdHtml(
-                    generateATag('index.php?v=novel&nid=' . $content['id'], htmlxss($content['title'])) .
-                        generateNewbadge($content['id'], $content['general_all_no'])
+                    generateATag("index.php?v=novel&nid=$nid", htmlxss($content['title'])) .
+                        generateNewbadge($nid, $content['general_all_no'])
                 ));
                 print(generateTd(date('Y/m/d H:i:s', $content['general_lastup'])));
                 print(generateTd($content['author']));
