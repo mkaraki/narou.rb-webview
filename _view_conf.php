@@ -99,6 +99,7 @@
     </form>
 </div>
 
+<script src="script.conf.js"></script>
 <script>
     document.getElementById('loadscr').classList.remove('d-none');
     window.addEventListener('load', (event) => {
