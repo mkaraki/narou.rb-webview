@@ -1,3 +1,6 @@
+<?php
+require_once '_postconfig.php';
+?>
 <div id="confscr" class="d-none">
     <div class="alert alert-warning" role="alert">
         設定値としおりのデータはブラウザ依存です。データを他のブラウザに移行したい場合、<a class="alert-link" href="#transferSettings">エクスポート機能</a>を利用してください。
@@ -93,6 +96,7 @@
                         最後の設定保存からデータが失われるまでの日数です。<br />
                         <span class="text-danger">ブラウザのクッキーが失われた場合、データも同様に失われます。定期的にエクスポートを行い、バックアップを取ってください。</span>
                     </p>
+                    <?php if ($allow_readserverconf ?? false) require('_viewitem_serverconf.php');  ?>
                 </div>
             </div>
         </div>
