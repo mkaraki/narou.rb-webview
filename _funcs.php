@@ -6,14 +6,15 @@ function htmlxss($str)
 
 function generateTd($innerText, $attr = '')
 {
-    print("<td $attr>");
-    print(htmlxss($innerText));
-    print('</td>');
+    return ("<td $attr>" . htmlxss($innerText) . '</td>');
 }
 
 function generateTdHtml($innerHtml, $attr = '')
 {
-    print("<td $attr>");
-    print($innerHtml);
-    print('</td>');
+    return "<td $attr>" . $innerHtml . '</td>';
+}
+
+function generateATag($href, $innerHtml, $attr = '')
+{
+    return '<a href="' . $href . '"' . " $attr>" . "$innerHtml</a>";
 }

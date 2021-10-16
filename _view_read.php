@@ -13,7 +13,7 @@ $prevurl = "index.php?v=read&sid=$prevcode&nid=$nid";
 $nexturl = "index.php?v=read&sid=$nextcode&nid=$nid";
 $novelurl = "index.php?v=novel&nid=$nid";
 ?>
-<div class="container p-4" id="reader-container">
+<div class="container p-4" style="max-width: <?= $_COOKIE['readermaxwid'] ?? 700; ?>;">
     <div class="row">
         <div class="col">
             <div class="text-center">
@@ -47,6 +47,10 @@ $novelurl = "index.php?v=novel&nid=$nid";
         </div>
         <div class="col-4 text-center">
             <a href="<?= $novelurl ?>">目次</a>
+            <br />
+            <a href="javascript:void(0)" onclick="bookmarkAdd(<?= $nid; ?>, <?= $sid ?>);" id="addBmark" aria-disabled="false">
+                ページを保存
+            </a>
         </div>
         <div class="col-4 text-center">
             <?php
@@ -56,4 +60,10 @@ $novelurl = "index.php?v=novel&nid=$nid";
         </div>
     </div>
 </div>
+<script src="script.bookmark.js"></script>
 <script src="script.reader.js"></script>
+<script>
+    window.onload = function() {
+        bookmarkCheck(<?= $nid; ?>, <?= $sid; ?>, true);
+    }
+</script>
