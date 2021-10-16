@@ -2,12 +2,12 @@
 require_once("vendor/autoload.php");
 require_once('_postconfig.php');
 
-function loadYaml($path)
+function loadYaml(string $path): array
 {
     return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($path));
 }
 
-function loadIndex($useapi = false)
+function loadIndex(bool $useapi = false): array
 {
     global $naroudbyaml, $apiclient_list_url, $apiclient;
     if (!$useapi || !$apiclient) {
@@ -18,7 +18,7 @@ function loadIndex($useapi = false)
     }
 }
 
-function loadToc($id, $loadedindex = null)
+function loadToc(int $id, array $loadedindex = null): array
 {
     global $narounoveldir;
     if ($loadedindex === null) $loadedindex = loadIndex();
@@ -31,7 +31,7 @@ function loadToc($id, $loadedindex = null)
     return loadYaml($tocpath);
 }
 
-function loadContent($storyid, $novelid, $loadedtoc = null, $loadedindex = null)
+function loadContent(int $storyid, int $novelid, array $loadedtoc = null, array $loadedindex = null): array
 {
     global $narounoveldir;
     if ($loadedindex === null) $loadedindex = loadIndex();

@@ -6,13 +6,13 @@ $index = loadIndex(true);
 $sort = 'general_lastup';
 $asc = 'desc';
 
-function cmpindex($a, $b)
+function cmpindex(array $a, array $b): int
 {
     global $sort, $asc;
     if ($a[$sort] == $b[$sort]) {
         return 0;
     }
-    return ($a[$sort] < $b[$sort]) ? ($asc ? -1 : 1) : ($asc ? 1 : -1);
+    return ($a[$sort] < $b[$sort]) ? -1 : 1;
 }
 
 ?>
@@ -29,10 +29,11 @@ function cmpindex($a, $b)
             <?php
             usort($index, 'cmpindex');
             foreach ($index as $content) {
-                if (!isset($_COOKIE["bm-" . $content['id']])) continue;
+                $nid = (int)$content['id'];
+                if (!isset($_COOKIE["bm-$nid"])) continue;
                 print('<tr>');
                 print(generateTdHtml(
-                    generateATag('index.php?v=novel&nid=' . $content['id'], htmlxss($content['title']))
+                    generateATag("index.php?v=novel&nid=$nid", htmlxss($content['title']))
                 ));
                 print(generateTd(date('Y/m/d H:i:s', $content['general_lastup'])));
                 print(generateTd($content['author']));
