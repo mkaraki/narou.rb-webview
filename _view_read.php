@@ -19,13 +19,13 @@ $maxwid = intval($_COOKIE['readermaxwid'] ?? 700);
     <div class="row">
         <div class="col">
             <div class="text-center">
-                <h3><?= $toc['title']; ?></h3>
-                <h5><?= $content['chapter']; ?></h5>
-                <h5><?= $content['subchapter']; ?></h5>
-                <h5><?= $content['subtitle']; ?></h5>
+                <h3><?= $toc['title'] ?? '無題の小説'; ?></h3>
+                <h5><?= $content['chapter'] ?? ''; ?></h5>
+                <h5><?= $content['subchapter'] ?? ''; ?></h5>
+                <h5><?= $content['subtitle'] ?? ''; ?></h5>
             </div>
             <div class="text-end">
-                <?= $toc['author']; ?>
+                <?= $toc['author'] ?? ''; ?>
             </div>
         </div>
     </div>
