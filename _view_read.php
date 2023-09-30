@@ -1,5 +1,6 @@
 <?php
 require_once '_yamlmetadataloader.php';
+require_once '_funcs.php';
 $sid = intval($_GET['sid']);
 $nid = intval($_GET['nid']);
 

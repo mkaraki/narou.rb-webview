@@ -12,7 +12,7 @@ $siteentry = $_GET['v'] ?? 'list';
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="<?= $_COOKIE['gcolorset'] === '1' ?  'text-white bg-dark' : ''; ?>">
+<body class="<?= ($_COOKIE['gcolorset'] ?? '0') === '1' ?  'text-white bg-dark' : ''; ?>">
     <div id="loadscr" class="loadscr d-none">
         <div class="d-flex justify-content-center align-items-center h-100">
             <div class="spinner-border" role="status">
