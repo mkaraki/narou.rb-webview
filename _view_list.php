@@ -40,7 +40,7 @@ function generateNewbadge(int $nid, int $tno): string
             <?php
             usort($index, 'cmpindex');
             foreach ($index as $content) {
-                $nid = (int)$content;
+                $nid = (int)$content['id'];
                 print('<tr>');
                 print(generateTdHtml(
                     generateATag("index.php?v=novel&nid=$nid", htmlxss($content['title'])) .
