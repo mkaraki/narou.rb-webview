@@ -2,6 +2,7 @@
 require_once('_postconfig.php');
 
 ?>
+<title>追加 - Narou.rb Web Viewer</title>
 <div class="container">
     <div class="row">
         <div class="col">

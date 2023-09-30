@@ -1,6 +1,7 @@
 <?php
 require_once '_postconfig.php';
 ?>
+<title>設定 - Narou.rb Web Viewer</title>
 <div id="confscr" class="d-none">
     <div class="alert alert-warning" role="alert">
         設定値としおりのデータはブラウザ依存です。データを他のブラウザに移行したい場合、<a class="alert-link" href="#transferSettings">エクスポート機能</a>を利用してください。

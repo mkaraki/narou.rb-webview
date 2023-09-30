@@ -5,6 +5,7 @@ $nid = intval($_GET['nid']);
 $toc = loadToc($nid);
 
 ?>
+<title><?= htmlxss($toc['title'] ?? '無題の小説') ?> - Narou.rb Web Viewer</title>
 <div>
     <div class="metadatas">
         <div class="container p-4">
