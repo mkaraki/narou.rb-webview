@@ -26,7 +26,7 @@ $toc = loadToc($nid);
             </div>
         </div>
     </div>
-    <table data-toggle="table" class="table table-striped <?= $_COOKIE['gcolorset'] === '1' ?  'table-dark' : ''; ?>">
+    <table data-toggle="table" class="table table-striped <?= ($_COOKIE['gcolorset'] ?? '0') === '1' ?  'table-dark' : ''; ?>">
         <thead>
             <tr>
                 <th>タイトル</th>

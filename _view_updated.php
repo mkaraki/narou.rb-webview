@@ -18,7 +18,7 @@ function cmpindex(array $a, array $b): int
 ?>
 <title>更新された小説 - Narou.rb Web Viewer</title>
 <div>
-    <table data-toggle="table" class="table table-striped <?= $_COOKIE['gcolorset'] === '1' ?  'table-dark' : ''; ?>">
+    <table data-toggle="table" class="table table-striped <?= ($_COOKIE['gcolorset'] ?? '0') === '1' ?  'table-dark' : ''; ?>">
         <thead>
             <tr>
                 <th>タイトル</th>
