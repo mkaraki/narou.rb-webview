@@ -16,7 +16,7 @@ $novelurl = "index.php?v=novel&nid=$nid";
 
 $maxwid = intval($_COOKIE['readermaxwid'] ?? 700);
 ?>
-<title><?= htmlxss($toc['subtitle'] ?? '無題のストーリ') ?> - <?= htmlxss($toc['title'] ?? '無題の小説') ?> - Narou.rb Web Viewer</title>
+<title><?= htmlxss($content['subtitle'] ?? '無題のストーリ') ?> - <?= htmlxss($toc['title'] ?? '無題の小説') ?> - Narou.rb Web Viewer</title>
 <div class="container p-4" style="max-width: <?= $maxwid ?>px;">
     <div class="row">
         <div class="col">
