@@ -1,6 +1,6 @@
 <?php
-require_once '__config.php';
-require_once '_funcs.php';
+require_once __DIR__ . '/../__config.php';
+require_once __DIR__ . '/../internal/funcs.php';
 ?>
 <h5>サーバ側設定</h5>
 <p>サーバ側設定は閲覧専用です。</p>

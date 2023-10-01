@@ -3,7 +3,9 @@
     "description": "Narou.rb downloaded data viewer",
     "license": "MIT",
     "require": {
-        "symfony/yaml": "^5.3"
+        "symfony/yaml": "^5.3",
+        "twbs/bootstrap": "^5.3",
+        "klein/klein": "^2.1"
     },
     "require-dev": {
         "vimeo/psalm": "^4.10"
