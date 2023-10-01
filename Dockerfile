@@ -1,7 +1,6 @@
 FROM composer AS installdep
 
-COPY composer.json app/
-COPY composer.lock app/
+COPY composer.json /app/
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
