@@ -4,9 +4,29 @@ require_once __DIR__ . '/../internal/funcs.php';
 $sid = intval($request->sid);
 $nid = intval($request->nid);
 
+// Index file update time must be max of each novel/story last update
+// Check it's true
+$idx_update = getIndexFileUpdateEpoch();
+$last_update = putLastModifiedAndEnd($idx_update);
+
 $ind = loadIndex();
-$toc = loadToc($nid, $ind);
+$indn = loadIndexNovel($nid, $ind);
+
+// Toc written update time is always max of each stories
+// Or download date
+$novelupd = getLastModifiedNovelEpoch($indn);
+$last_update = putLastModifiedAndEnd($novelupd, $last_update);
+
+$toc = loadToc($nid, $ind, $indn);
+
+// Story has download date,
+// If story has update, 
+// download date increase and update time also increase.
+$storyupd = getLastModifiedStoryEpoch($sid, $toc);
+$last_update = putLastModifiedAndEnd($storyupd, $last_update);
+
 $content = loadContent($sid, $nid, $toc, $ind);
+
 
 $prevcode = $sid - 1;
 $nextcode = $sid + 1;

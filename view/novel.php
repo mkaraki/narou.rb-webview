@@ -2,7 +2,22 @@
 require_once __DIR__ . '/../internal/yamlmetadataloader.php';
 require_once __DIR__ . '/../internal/funcs.php';
 $nid = intval($request->nid);
-$toc = loadToc($nid);
+
+// Index file update time must be max of each novel/story last update
+// Check it's true
+$idx_update = getIndexFileUpdateEpoch();
+$last_update = putLastModifiedAndEnd($idx_update);
+
+$ind = loadIndex();
+$indn = loadIndexNovel($nid, $ind);
+
+// Toc written update time is always max of each stories
+// Or download date
+// ToDo: Check about novel description update
+$novelupd = getLastModifiedNovelEpoch($indn);
+putLastModifiedAndEnd($novelupd, $last_update);
+
+$toc = loadToc($nid, $ind, $indn);
 
 ?>
 <!DOCTYPE html>

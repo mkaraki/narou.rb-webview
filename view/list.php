@@ -3,7 +3,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../internal/yamlmetadataloader.php';
 require_once __DIR__ . '/../internal/funcs.php';
 
-$index = loadIndex(true);
+putLastModifiedAndEnd(getIndexFileUpdateEpoch());
+
+$index = loadIndex();
 
 define('SORT', $_GET['s'] ?? 'title');
 define('ASC', ($_GET['sd'] ?? 'asc') !== 'desc');
