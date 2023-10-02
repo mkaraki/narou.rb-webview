@@ -52,7 +52,7 @@ usort($index, 'cmpindex');
                         <td><a href="/novel/<?= $nid ?>"><?= htmlxss($content['title']) ?></a></td>
                         <td><?= date('Y/m/d H:i:s', $content['general_lastup']) ?></td>
                         <td><?= htmlxss($content['author']) ?></td>
-                        <td><a href="<?= $content['toc_url'] ?>" target="_blank">htmlxss($content['sitename'])</a></td>
+                        <td><a href="<?= $content['toc_url'] ?>" target="_blank"><?= htmlxss($content['sitename']) ?></a></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
