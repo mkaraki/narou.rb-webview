@@ -41,4 +41,6 @@ $router->respond('GET', '/assets/bootstrap.color.js', function () {
     readfile(__DIR__ . '/assets/bootstrap.color.js');
 });
 
+require_once __DIR__ . '/intra_route.php';
+
 $router->dispatch();

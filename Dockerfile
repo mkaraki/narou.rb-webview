@@ -22,3 +22,4 @@ COPY component /var/www/html/component
 COPY internal /var/www/html/internal
 COPY view /var/www/html/view
 COPY index.php /var/www/html/index.php
+COPY intra_route.php /var/www/html/intra_route.php
