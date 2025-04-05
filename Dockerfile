@@ -8,6 +8,16 @@ RUN composer install
 
 FROM php:8.2-apache
 
+RUN pecl install apcu \
+    && docker-php-ext-install opcache \
+    && docker-php-ext-enable apcu
+
+RUN <<EOF cat >> $PHP_INI_DIR/conf.d/apcu.ini
+[apcu]
+apc.enable=1
+apc.enable_cli=1
+EOF
+
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN a2enmod rewrite

@@ -2,9 +2,21 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . '/postconfig.php';
 
+define('APCU_AVAILABLE', function_exists('apcu_enabled') && apcu_enabled());
+
 function loadYaml(string $path): array
 {
-    return \Symfony\Component\Yaml\Yaml::parse(file_get_contents($path));
+    if (APCU_AVAILABLE && !isset($_GET['no_cache']) && apcu_exists($path)) {
+        return apcu_fetch($path);
+    }
+
+    $data = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($path));
+
+    if (APCU_AVAILABLE) {
+        apcu_store($path, $data, 1800);
+    }
+
+    return $data;
 }
 
 function loadIndex(bool $useapi = false): array
