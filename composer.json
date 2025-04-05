@@ -6,7 +6,8 @@
         "symfony/yaml": "^5.3",
         "twbs/bootstrap": "^5.3",
         "klein/klein": "^2.1",
-        "ext-apcu": "*"
+        "ext-apcu": "*",
+        "sentry/sentry": "^4.10"
     },
     "require-dev": {
         "vimeo/psalm": "^4.10"

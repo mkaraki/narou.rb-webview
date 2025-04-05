@@ -4,20 +4,25 @@ require_once __DIR__ . '/../internal/funcs.php';
 $sid = intval($request->sid);
 $nid = intval($request->nid);
 
+$commit_id = null;
+if (!empty($_GET['commit_id']) && preg_match('/^[0-9a-f]{7,40}$/', $_GET['commit_id'])) {
+    $commit_id = $_GET['commit_id'];
+}
+
 // Index file update time must be max of each novel/story last update
 // Check it's true
 $idx_update = getIndexFileUpdateEpoch();
 $last_update = putLastModifiedAndEnd($idx_update);
 
-$ind = loadIndex();
-$indn = loadIndexNovel($nid, $ind);
+$ind = loadIndex(commit_id: $commit_id);
+$indn = loadIndexNovel($nid, $ind, $commit_id);
 
 // Toc written update time is always max of each stories
 // Or download date
 $novelupd = getLastModifiedNovelEpoch($indn);
 $last_update = putLastModifiedAndEnd($novelupd, $last_update);
 
-$toc = loadToc($nid, $ind, $indn);
+$toc = loadToc($nid, $ind, $indn, $commit_id);
 
 // Story has download date,
 // If story has update, 
@@ -25,7 +30,7 @@ $toc = loadToc($nid, $ind, $indn);
 $storyupd = getLastModifiedStoryEpoch($sid, $toc);
 $last_update = putLastModifiedAndEnd($storyupd, $last_update);
 
-$content = loadContent($sid, $nid, $toc, $ind);
+$content = loadContent($sid, $nid, $toc, $ind, $commit_id);
 
 
 $prevcode = $sid - 1;

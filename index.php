@@ -2,6 +2,16 @@
 error_reporting(E_ALL & ~E_DEPRECATED);
 require_once __DIR__ . '/vendor/autoload.php';
 
+$sentryOpts = [
+    'traces_sample_rate' => 1.0,
+];
+
+if (defined('SENTRY_DSN') && !empty(SENTRY_DSN)) {
+    $sentryOpts['dsn'] = SENTRY_DSN;
+}
+
+\Sentry\init($sentryOpts);
+
 $router = new \Klein\Klein();
 
 $router->respond('GET', '/', function () {
@@ -10,6 +20,10 @@ $router->respond('GET', '/', function () {
 
 $router->respond('GET', '/novel/[i:nid]', function ($request, $response, $service, $app) {
     require __DIR__ . '/view/novel.php';
+});
+
+$router->respond('GET', '/novel/[i:nid]/history', function ($request, $response, $service, $app) {
+    require __DIR__ . '/view/novel_history.php';
 });
 
 $router->respond('GET', '/novel/[i:nid]/[i:sid]', function ($request, $response, $service, $app) {
@@ -41,4 +55,12 @@ $router->respond('GET', '/assets/bootstrap.color.js', function () {
     readfile(__DIR__ . '/assets/bootstrap.color.js');
 });
 
+$transactionContext = \Sentry\Tracing\TransactionContext::make()
+    ->setName($_SERVER['REQUEST_URI'])
+    ->setOp('http.server');
+$transaction = \Sentry\startTransaction($transactionContext);
+\Sentry\SentrySdk::getCurrentHub()->setSpan($transaction);
+
 $router->dispatch();
+
+$transaction->finish();
