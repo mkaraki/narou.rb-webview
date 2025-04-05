@@ -21,7 +21,7 @@ putLastModifiedAndEnd($novelupd, $last_update);
 $toc = loadToc($nid, $ind, $indn);
 $git_find_path = getTocPath($nid, $ind, $indn);
 
-$history = getFileLogs($git_find_path, $git_find_path);
+$history = getFileLogs(NAROU_DIR, $git_find_path);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
