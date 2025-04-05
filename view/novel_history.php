@@ -72,8 +72,6 @@ $history = getFileLogs(NAROU_DIR, $git_find_path);
                     <?= htmlxss($commit['commit_id']) ?>
                 </a>
             </th>
-        </tr>
-        <tr>
             <td><?= htmlxss($commit['message']) ?></td>
         </tr>
         <?php endforeach; ?>
