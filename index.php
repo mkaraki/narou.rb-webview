@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ALL & ~E_DEPRECATED);
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/internal/postconfig.php';
 
 $sentryOpts = [
     'traces_sample_rate' => 1.0,
