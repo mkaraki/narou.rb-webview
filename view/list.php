@@ -27,6 +27,9 @@ if (!empty($_GET['skip']) && is_numeric($_GET['skip'])) {
     $skip = intval($_GET['skip']);
 }
 
+$offset = $skip * ITEM_IN_PAGE;
+$limit_offset = $offset + ITEM_IN_PAGE;
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -53,7 +56,7 @@ if (!empty($_GET['skip']) && is_numeric($_GET['skip'])) {
                 </tr>
             </thead>
             <tbody>
-                <?php for($i = ($skip * ITEM_IN_PAGE); ($i < ($skip + ITEM_IN_PAGE) && $i < $count); $i++) :
+                <?php for($i = $offset; ($i < $limit_offset && $i < $count); $i++) :
                     $content = $index[$i];
                 ?>
                     <tr>
