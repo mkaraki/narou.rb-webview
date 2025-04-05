@@ -4,7 +4,7 @@ COPY composer.json /app/
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN composer install
+RUN composer install --ignore-platform-reqs
 
 FROM php:8.2-apache
 
