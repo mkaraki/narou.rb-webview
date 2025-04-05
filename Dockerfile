@@ -24,11 +24,11 @@ RUN a2enmod rewrite
 COPY .htaccess /var/www/html/.htaccess
 
 RUN apt-get update && \
-    apt-get install -y git ca-certificates sudo --no-install-recommends && \
-    sudo -u www-data git config --global --add safe.directory "*" && \
-    apt-get purge sudo -y && \
+    apt-get install -y git ca-certificates --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN git config --system --add safe.directory "*"
 
 COPY --from=installdep /app /var/www/html
 
