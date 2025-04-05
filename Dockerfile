@@ -23,6 +23,13 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN a2enmod rewrite
 COPY .htaccess /var/www/html/.htaccess
 
+RUN apt-get update && \
+    apt-get install -y git ca-certificates --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN git config --system --add safe.directory "*"
+
 COPY --from=installdep /app /var/www/html
 
 COPY __config.docker.php /var/www/html/__config.php
