@@ -10,7 +10,8 @@ function getFileLogs($git_dir, $file): array
         $git_dir = escapeshellarg($git_dir);
         $file = escapeshellarg($file);
 
-        $raw_log = shell_exec('git -C ' . $git_dir . ' log --format=oneline --abbrev-commit ' . $file);
+        $cmd = 'git -C ' . $git_dir . ' log --format=oneline --abbrev-commit ' . $file;
+        $raw_log = shell_exec($cmd);
 
         if ($raw_log === null || $raw_log === false) {
             die('Gitからの取得に失敗しました。');
