@@ -3,13 +3,18 @@ require_once __DIR__ . '/../internal/yamlmetadataloader.php';
 require_once __DIR__ . '/../internal/funcs.php';
 $nid = intval($request->nid);
 
+$commit_id = null;
+if (!empty($_GET['commit_id']) && preg_match('/^[0-9a-f]{7,40}$/', $_GET['commit_id'])) {
+    $commit_id = $_GET['commit_id'];
+}
+
 // Index file update time must be max of each novel/story last update
 // Check it's true
 $idx_update = getIndexFileUpdateEpoch();
 $last_update = putLastModifiedAndEnd($idx_update);
 
-$ind = loadIndex();
-$indn = loadIndexNovel($nid, $ind);
+$ind = loadIndex(commit_id: $commit_id);
+$indn = loadIndexNovel($nid, $ind, $commit_id);
 
 // Toc written update time is always max of each stories
 // Or download date
@@ -17,7 +22,7 @@ $indn = loadIndexNovel($nid, $ind);
 $novelupd = getLastModifiedNovelEpoch($indn);
 putLastModifiedAndEnd($novelupd, $last_update);
 
-$toc = loadToc($nid, $ind, $indn);
+$toc = loadToc($nid, $ind, $indn, $commit_id);
 
 ?>
 <!DOCTYPE html>
@@ -75,7 +80,7 @@ $toc = loadToc($nid, $ind, $indn);
                         </tr>
                     <?php endif; ?>
                     <tr>
-                        <td><a href="/novel/<?= $nid ?>/<?= $id ?>" id="s-<?= $id ?>"><?= htmlxss($content['subtitle']) ?></a></td>
+                        <td><a href="/novel/<?= $nid ?>/<?= $id ?>?commit_id=<?= $commit_id ?>" id="s-<?= $id ?>"><?= htmlxss($content['subtitle']) ?></a></td>
                         <td><?= htmlxss($content['subdate']) ?></td>
                         <td><?= htmlxss($content['subupdate']) ?></td>
                     </tr>
@@ -83,10 +88,11 @@ $toc = loadToc($nid, $ind, $indn);
             </tbody>
         </table>
         <span><?= count($toc['subtitles']); ?>件の項目</span>
+        <a href="/novel/<?= $nid ?>/history">過去ログを見る</a>
     </main>
 
 
-    <script src=" /assets/bootstrap.bundle.min.js"></script>
+    <script src="/assets/bootstrap.bundle.min.js"></script>
     <script src="/assets/bootstrap.color.js"></script>
     <script src="/assets/script.js"></script>
     <script>

@@ -4,14 +4,31 @@ COPY composer.json /app/
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN composer install
+RUN composer install --ignore-platform-reqs
 
 FROM php:8.2-apache
+
+RUN pecl install apcu \
+    && docker-php-ext-install opcache \
+    && docker-php-ext-enable apcu
+
+RUN <<EOF cat >> $PHP_INI_DIR/conf.d/apcu.ini
+[apcu]
+apc.enable=1
+apc.enable_cli=1
+EOF
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN a2enmod rewrite
 COPY .htaccess /var/www/html/.htaccess
+
+RUN apt-get update && \
+    apt-get install -y git ca-certificates --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN git config --system --add safe.directory "*"
 
 COPY --from=installdep /app /var/www/html
 

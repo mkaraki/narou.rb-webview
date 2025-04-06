@@ -5,7 +5,12 @@ require_once __DIR__ . '/../internal/funcs.php';
 
 putLastModifiedAndEnd(getIndexFileUpdateEpoch());
 
-$index = loadIndex();
+$commit_id = null;
+if (!empty($_GET['commit_id']) && preg_match('/^[0-9a-f]{7,40}$/', $_GET['commit_id'])) {
+    $commit_id = $_GET['commit_id'];
+}
+
+$index = loadIndex(commit_id: $commit_id);
 
 define('SORT', $_GET['s'] ?? 'title');
 define('ASC', ($_GET['sd'] ?? 'asc') !== 'desc');
@@ -19,6 +24,16 @@ function cmpindex(array $a, array $b): int
 }
 
 usort($index, 'cmpindex');
+
+$count = count($index);
+$skip = 0;
+define('ITEM_IN_PAGE', 100);
+if (!empty($_GET['skip']) && is_numeric($_GET['skip'])) {
+    $skip = intval($_GET['skip']);
+}
+
+$offset = $skip * ITEM_IN_PAGE;
+$limit_offset = $offset + ITEM_IN_PAGE;
 
 ?>
 <!DOCTYPE html>
@@ -46,18 +61,28 @@ usort($index, 'cmpindex');
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($index as $content) : ?>
+                <?php for($i = $offset; ($i < $limit_offset && $i < $count); $i++) :
+                    $content = $index[$i];
+                ?>
                     <tr>
                         <?php $nid = (int)$content['id']; ?>
-                        <td><a href="/novel/<?= $nid ?>"><?= htmlxss($content['title']) ?></a></td>
+                        <td><a href="/novel/<?= $nid ?>?commit_id=<?= $commit_id ?>"><?= htmlxss($content['title']) ?></a></td>
                         <td><?= date('Y/m/d H:i:s', $content['general_lastup']) ?></td>
                         <td><?= htmlxss($content['author']) ?></td>
                         <td><a href="<?= $content['toc_url'] ?>" target="_blank"><?= htmlxss($content['sitename']) ?></a></td>
                     </tr>
-                <?php endforeach; ?>
+                <?php endfor; ?>
             </tbody>
         </table>
-        <span><?= count($index); ?>件の項目</span>
+        <div>
+            <?php if ($skip > 0) : ?>
+                <a href="/?s=<?= urlencode(SORT) ?>&sd=<?= ASC ? 'asc' : 'desc' ?>&skip=<?= $skip - 1 ?>&commit_id=<?= $commit_id ?>">前ページ</a>
+            <?php endif; ?>
+            <?php if (($skip + 1) * ITEM_IN_PAGE < $count) : ?>
+                <a href="/?s=<?= urlencode(SORT) ?>&sd=<?= ASC ? 'asc' : 'desc' ?>&skip=<?= $skip + 1 ?>&commit_id=<?= $commit_id ?>">次ページ</a>
+            <?php endif; ?>
+        </div>
+        <span>全<?= $count; ?>件の項目 (<?= $skip * ITEM_IN_PAGE + 1 ?>件目から<?= ITEM_IN_PAGE ?>件を表示中)</span>
     </main>
 
     <script src="/assets/bootstrap.bundle.min.js"></script>
