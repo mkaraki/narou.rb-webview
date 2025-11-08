@@ -200,7 +200,13 @@ pub async fn load_content(novel_id: u64, story_id: u64, loaded_index: Option<Vec
         toc = loaded_toc.unwrap();
     }
 
-    let subtitle = &toc.subtitles[story_id as usize];
+    let subtitle;
+    let story_id: usize = story_id as usize;
+    if story_id < toc.subtitles.len() {
+        subtitle = &toc.subtitles[story_id];
+    } else {
+        return Err(());
+    }
 
     let novel_content_dir = narou_path.join("小説データ").join(&*n_info.sitename).join(&*n_info.file_title).join("本文");
     let novel_content_path = novel_content_dir.join(format!("{} {}.yaml", subtitle.index, subtitle.file_subtitle));
