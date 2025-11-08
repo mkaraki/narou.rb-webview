@@ -89,11 +89,13 @@ const urlGen = (endpoint: String, queryParams: Object = {}, baseQueryParams: URL
       />
       <div class="row">
         <div class="col">
+          <hr />
           <div class="novelview novelintro" v-html="data?.reader_info.element?.introduction"></div>
           <hr />
           <div class="novelview body" v-html="data?.reader_info?.element?.body"></div>
           <hr />
           <div class="novelview novelpost" v-html="data?.reader_info?.element?.postscript"></div>
+          <hr />
         </div>
       </div>
     </div>
