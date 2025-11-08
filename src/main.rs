@@ -82,7 +82,7 @@ fn main() -> io::Result<()> {
                          }))
                 )
         })
-            .bind("0.0.0.0:3001")?
+            .bind(option_env!("APP_BIND").unwrap_or("[::]:3001"))?
             .run()
             .await
     })?;
