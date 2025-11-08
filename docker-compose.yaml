@@ -1,5 +1,3 @@
-version: '2'
-
 services:
   narourb:
     image: ghcr.io/mkaraki/narou.rb:minimal
@@ -9,14 +7,11 @@ services:
       - 8001:8001
     volumes:
       - ./data:/opt/narou
-    restart: always
 
   webview:
     build: .
-    #image: ghcr.io/mkaraki/narou.rb-webview:latest
     ports:
-      - 8002:80
+      - 3001:3001
     volumes:
       - ./data:/data:ro
-      # - ./__config.php:/var/www/html/__config.php:ro
     restart: always
