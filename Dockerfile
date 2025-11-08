@@ -1,42 +1,31 @@
-FROM composer AS installdep
+FROM oven/bun:latest AS frontend
 
-COPY composer.json /app/
+WORKDIR /app
 
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY frontend/package.json frontend/bun.lock /app/
 
-RUN composer install --ignore-platform-reqs
+RUN bun install
 
-FROM php:8.2-apache
+COPY --exclude=dist --exclude=node_modules frontend /app
 
-RUN pecl install apcu \
-    && docker-php-ext-install opcache \
-    && docker-php-ext-enable apcu
+RUN bun run build
 
-RUN <<EOF cat >> $PHP_INI_DIR/conf.d/apcu.ini
-[apcu]
-apc.enable=1
-apc.enable_cli=1
-EOF
+FROM rust:1.91-trixie AS build
 
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+WORKDIR /app
 
-RUN a2enmod rewrite
-COPY .htaccess /var/www/html/.htaccess
+COPY Cargo.lock Cargo.toml /app/
+COPY src /app/src
 
-RUN apt-get update && \
-    apt-get install -y git ca-certificates --no-install-recommends && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN cargo build --release --bin narourb_webview
 
-RUN git config --system --add safe.directory "*"
+FROM debian:trixie-slim
 
-COPY --from=installdep /app /var/www/html
+WORKDIR /app
+COPY --from=build /app/target/release/narourb_webview /app/
+COPY --from=frontend /app/dist /app/frontend/dist
 
-COPY __config.docker.php /var/www/html/__config.php
+VOLUME /opt/narou
+EXPOSE 3001
 
-COPY assets /var/www/html/assets
-COPY component /var/www/html/component
-COPY internal /var/www/html/internal
-COPY view /var/www/html/view
-COPY index.php /var/www/html/index.php
-COPY intra_route.php /var/www/html/intra_route.php
+ENTRYPOINT ["/app/narourb_webview"]
