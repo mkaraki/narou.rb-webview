@@ -18,17 +18,16 @@ fn main() -> io::Result<()> {
     tracing_subscriber::Registry::default()
         .with(sentry::integrations::tracing::layer())
         .init();
-    let _guard = (
-            option_env!("SENTRY_DSN").unwrap_or(""),
-            sentry::init(sentry::ClientOptions {
-                release: sentry::release_name!(),
-                traces_sample_rate: 1.0,
-                send_default_pii: false,
-                max_request_body_size: sentry::MaxRequestBodySize::Always,
-                ..Default::default()
-            }
-        ),
-    );
+    let _guard = sentry::init((
+        option_env!("SENTRY_DSN").unwrap_or(""),
+        sentry::ClientOptions {
+            release: sentry::release_name!(),
+            traces_sample_rate: 1.0,
+            send_default_pii: false,
+            max_request_body_size: sentry::MaxRequestBodySize::Always,
+            ..Default::default()
+        }
+    ));
 
     unsafe {
         let res = git2::opts::set_verify_owner_validation(false);
