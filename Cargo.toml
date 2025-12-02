@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-actix-web = { version= "4.11.0", default-features = false, features = ["macros", "unicode"] }
+actix-web = { version= "4.12.1", default-features = false, features = ["macros", "unicode"] }
 git2 = { version = "0.20.2", default-features = false }
 sentry = { version = "0.45.0", features = ["actix", "tracing"] }
 tracing = "0.1.41"
