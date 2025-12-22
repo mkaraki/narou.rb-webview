@@ -7,7 +7,7 @@ edition = "2024"
 codegen-units = 1
 opt-level = 3
 debug = false
-strip = "symbols"
+strip = "debuginfo"
 debug-assertions = false
 lto = "fat"
 
