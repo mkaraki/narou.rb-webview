@@ -1,6 +1,7 @@
 use crate::narou_types::*;
 
 use std::collections::HashMap;
+use std::env;
 use std::path::{Path, PathBuf};
 use git2::{DiffOptions, Oid, Repository, RepositoryOpenFlags};
 use tokio::fs::File;
@@ -13,8 +14,8 @@ use serde::Serialize;
 
 #[once()]
 pub fn get_narou_root() -> String {
-    let narou_root: &'static str = option_env!("NAROU_ROOT").unwrap_or("/data");
-    return narou_root.to_string();
+    let narou_root = env::var("NAROU_ROOT").unwrap_or("/data".to_string());
+    return narou_root;
 }
 
 #[tracing::instrument]

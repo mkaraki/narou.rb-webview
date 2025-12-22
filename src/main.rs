@@ -5,7 +5,7 @@ mod api_endpoint;
 
 use crate::api_endpoint::*;
 
-use std::{io};
+use std::{env, io};
 use actix_files as fs;
 use actix_files::NamedFile;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
@@ -15,10 +15,10 @@ use tracing_subscriber::prelude::*;
 use crate::narou_parser::get_narou_root;
 
 fn main() -> io::Result<()> {
-    let sentry_dsn = option_env!("SENTRY_DSN").unwrap_or("");
+    let sentry_dsn = env::var("SENTRY_DSN").unwrap_or("".to_string());
     println!("SENTRY_DSN: {}", sentry_dsn);
 
-    let sentry_debug = option_env!("SENTRY_DEBUG").unwrap_or("false");
+    let sentry_debug = env::var("SENTRY_DEBUG").unwrap_or("false".to_string());
     let sentry_debug = sentry_debug == "true";
     println!("SENTRY_DEBUG: {}", sentry_debug);
 
@@ -44,7 +44,7 @@ fn main() -> io::Result<()> {
         }
     }
 
-    let bind_addr = option_env!("APP_BIND").unwrap_or("[::]:3001");
+    let bind_addr = env::var("APP_BIND").unwrap_or("[::]:3001".to_string());
     println!("APP_BIND: {}", bind_addr);
     println!("NAROU_ROOT: {}", get_narou_root());
 
