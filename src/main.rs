@@ -12,18 +12,26 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
 use actix_web::middleware::DefaultHeaders;
 use tracing_subscriber::prelude::*;
-
+use crate::narou_parser::get_narou_root;
 
 fn main() -> io::Result<()> {
+    let sentry_dsn = option_env!("SENTRY_DSN").unwrap_or("");
+    println!("SENTRY_DSN: {}", sentry_dsn);
+
+    let sentry_debug = option_env!("SENTRY_DEBUG").unwrap_or("false");
+    let sentry_debug = sentry_debug == "true";
+    println!("SENTRY_DEBUG: {}", sentry_debug);
+
     tracing_subscriber::Registry::default()
         .with(sentry::integrations::tracing::layer())
         .init();
     let _guard = sentry::init((
-        option_env!("SENTRY_DSN").unwrap_or(""),
+        sentry_dsn,
         sentry::ClientOptions {
             release: sentry::release_name!(),
             traces_sample_rate: 1.0,
             send_default_pii: false,
+            debug: sentry_debug,
             max_request_body_size: sentry::MaxRequestBodySize::Always,
             ..Default::default()
         }
@@ -35,6 +43,10 @@ fn main() -> io::Result<()> {
             eprintln!("Failed to disable git owner validation");
         }
     }
+
+    let bind_addr = option_env!("APP_BIND").unwrap_or("[::]:3001");
+    println!("APP_BIND: {}", bind_addr);
+    println!("NAROU_ROOT: {}", get_narou_root());
 
     actix_web::rt::System::new().block_on(async {
         HttpServer::new(|| {
@@ -81,7 +93,7 @@ fn main() -> io::Result<()> {
                          }))
                 )
         })
-            .bind(option_env!("APP_BIND").unwrap_or("[::]:3001"))?
+            .bind(bind_addr)?
             .run()
             .await
     })?;

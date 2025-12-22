@@ -12,7 +12,7 @@ use chrono::{DateTime, Utc};
 use serde::Serialize;
 
 #[once()]
-fn get_narou_root() -> String {
+pub fn get_narou_root() -> String {
     let narou_root: &'static str = option_env!("NAROU_ROOT").unwrap_or("/data");
     return narou_root.to_string();
 }
@@ -63,7 +63,6 @@ async fn load_yaml_bin(path: &str, commit_id: Option<&str>) -> Result<Vec<u8>, (
 pub async fn load_index(commit_id: Option<&str>) -> Result<Vec<NovelInfo>, ()> {
     let narou_root = get_narou_root();
     let narou_path = Path::new(&narou_root);
-
 
     let narou_db = narou_path.join(".narou/database.yaml");
     let narou_db = narou_db.to_str().unwrap();
