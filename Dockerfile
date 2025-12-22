@@ -24,8 +24,9 @@ COPY Cargo.lock Cargo.toml /app/
 COPY src /app/src
 RUN cargo build --release --target=x86_64-unknown-linux-musl --bin narourb_webview
 
-FROM gcr.io/distroless/static-debian13:nonroot
+FROM scratch
 
+COPY --from=gcr.io/distroless/static-debian13:nonroot /etc/passwd /etc/passwd
 USER nonroot
 
 WORKDIR /app
