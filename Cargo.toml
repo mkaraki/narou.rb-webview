@@ -3,6 +3,14 @@ name = "narourb_webview"
 version = "0.1.0"
 edition = "2024"
 
+[profile.release]
+codegen-units = 1
+opt-level = 3
+debug = false
+strip = "symbols"
+debug-assertions = false
+lto = "fat"
+
 [dependencies]
 actix-web = { version= "4.12.1", default-features = false, features = ["macros", "unicode"] }
 git2 = { version = "0.20.2", default-features = false }
