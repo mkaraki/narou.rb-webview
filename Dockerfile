@@ -10,7 +10,7 @@ COPY --exclude=dist --exclude=node_modules frontend /app
 
 RUN bun run build
 
-FROM rust:1.91-alpine AS build
+FROM rust:1.92-alpine AS build
 
 WORKDIR /app
 
