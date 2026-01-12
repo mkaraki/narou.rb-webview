@@ -19,7 +19,7 @@
   "devDependencies": {
     "@tsconfig/node22": "^22.0.5",
     "@types/bootstrap": "^5.2.10",
-    "@types/node": "^24.10.0",
+    "@types/node": "^25.0.6",
     "@vitejs/plugin-vue": "^6.0.2",
     "@vue/tsconfig": "^0.8.1",
     "npm-run-all2": "^8.0.4",
