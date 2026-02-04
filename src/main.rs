@@ -64,6 +64,9 @@ fn main() -> io::Result<()> {
                         .service(api_story)
                         .service(api_novel_revision)
                         .service(api_content)
+                        .service(api_list_inspect)
+                        .service(api_story_inspect)
+                        .service(api_content_inspect)
                 )
                 .service(
                     web::scope("/assets")
