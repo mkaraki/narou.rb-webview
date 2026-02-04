@@ -1,8 +1,9 @@
 use actix_web::{get, web, HttpResponse, Responder};
 use rayon::prelude::ParallelSliceMut;
 use serde::Deserialize;
-use crate::api_types::{ApiElement, ApiNovelInfo, ApiNovelList, ApiNovelRevision, ApiReaderInfo, ApiStories, ApiSubtitle};
+use crate::api_types::{ApiElement, ApiNovelInfo, ApiNovelList, ApiNovelRevision, ApiReaderInfo, ApiStories, ApiSubtitle, InspectNovel};
 use crate::narou_parser::{get_db_novel_info_by_id, load_content, load_index, load_toc_by_id, load_toc_histories};
+use crate::narou_types::{NovelInfo, Toc};
 
 #[derive(Deserialize)]
 struct ApiListQueryParams {
@@ -10,16 +11,16 @@ struct ApiListQueryParams {
     commit_id: Option<String>,
     sort: Option<String>,
     order: Option<String>,
+    title_like: Option<String>,
+    author_like: Option<String>,
+    author_exact: Option<String>,
+    tag: Option<String>,
 }
 
-#[get("/novels")]
-pub async fn api_list(query: web::Query<ApiListQueryParams>) -> impl Responder {
-    let mut page = query.p.unwrap_or(1);
-    if page == 0 { page = 1; }
-    let skip = 100 * (page - 1u64);
+async fn extract_api_list(query: web::Query<ApiListQueryParams>) -> Vec<NovelInfo> {
     let commit_id: Option<&str> = if query.commit_id.is_some() { Some(query.commit_id.as_ref().unwrap()) } else { None };
 
-    let mut data = load_index(commit_id).await.unwrap();
+    let mut data: Vec<NovelInfo> = load_index(commit_id).await.unwrap();
 
     if let Some(sort) = query.sort.clone() {
         match sort.as_str() {
@@ -54,6 +55,29 @@ pub async fn api_list(query: web::Query<ApiListQueryParams>) -> impl Responder {
         }
     }
 
+    if let Some(title_like) = query.title_like.clone() {
+        data.retain(|v| v.title.contains(&title_like));
+    }
+
+    if let Some(author_exact) = query.author_exact.clone() {
+        data.retain(|v| v.author == author_exact);
+    } else if let Some(author_like) = query.author_like.clone() {
+        data.retain(|v| v.author.contains(&author_like));
+    }
+ 
+    data
+}
+
+#[get("/novels")]
+pub async fn api_list(query: web::Query<ApiListQueryParams>) -> impl Responder {
+    let has_commit_id = query.commit_id.is_some();
+    
+    let mut page = query.p.unwrap_or(1);
+    if page == 0 { page = 1; }
+    let skip = 100 * (page - 1u64);
+    
+    let data = extract_api_list(query).await;
+
     let res = ApiNovelList {
         total: data.len() as u64,
         page,
@@ -68,8 +92,16 @@ pub async fn api_list(query: web::Query<ApiListQueryParams>) -> impl Responder {
     };
 
     HttpResponse::Ok()
-        .insert_header(("Cache-Control", if commit_id.is_some() {"public, max-age=31536000"} else {"public, max-age=600"}))
+        .insert_header(("Cache-Control", if has_commit_id {"public, max-age=31536000"} else {"public, max-age=600"}))
         .json(res)
+}
+
+#[get("/inspect/novels")]
+pub async fn api_list_inspect(query: web::Query<ApiListQueryParams>) -> impl Responder {
+    let data = extract_api_list(query).await;
+
+    HttpResponse::Ok()
+        .json(data)
 }
 
 #[derive(Deserialize)]
@@ -112,6 +144,25 @@ pub async fn api_story(path: web::Path<(u64,)>, query: web::Query<ApiStoryQueryP
 
     HttpResponse::Ok()
         .insert_header(("Cache-Control", if commit_id.is_some() {"public, max-age=31536000"} else {"public, max-age=600"}))
+        .json(data)
+}
+
+#[get("/inspect/novels/{novelId}/subtitles")]
+pub async fn api_story_inspect(path: web::Path<(u64,)>, query: web::Query<ApiStoryQueryParams>) -> impl Responder {
+    let path = path.into_inner();
+    let novel_id = path.0;
+    let commit_id: Option<&str> = if query.commit_id.is_some() { Some(query.commit_id.as_ref().unwrap()) } else { None };
+
+    let novel_info = get_db_novel_info_by_id(novel_id, None, commit_id).await.unwrap();
+    let toc = load_toc_by_id(novel_id, None, Some(novel_info.clone()), commit_id).await.unwrap();
+    
+    let data = InspectNovel {
+        db_item: Some(novel_info),
+        toc: Some(toc),
+        story: None,
+    };
+    
+    HttpResponse::Ok()
         .json(data)
 }
 
@@ -171,6 +222,28 @@ pub async fn api_content(path: web::Path<(u64, u64)>, query: web::Query<ApiConte
     };
 
     HttpResponse::Ok()
-        .insert_header(("Cache-Control", if commit_id.is_some() {"public, max-age=31536000"} else {"public, max-age=600"}))
         .json(subtitle_info)
+}
+
+#[get("/inspect/novels/{novelId}/subtitles/{storyId}")]
+pub async fn api_content_inspect(path: web::Path<(u64, u64)>, query: web::Query<ApiContentQueryParams>) -> impl Responder {
+    let path = path.into_inner();
+    let novel_id = path.0;
+
+    let commit_id: Option<&str> = if query.commit_id.is_some() { Some(query.commit_id.as_ref().unwrap()) } else { None };
+
+    let novel_info = get_db_novel_info_by_id(novel_id, None, None).await.unwrap();
+    let toc_info = load_toc_by_id(novel_id, None, Some(novel_info.clone()), commit_id).await.unwrap();
+
+    let story_id = path.1;
+    let content = load_content(novel_id, story_id, None, Some(novel_info.clone()), Some(toc_info.clone()), commit_id).await.unwrap();
+
+    let data = InspectNovel {
+        db_item: Some(novel_info),
+        toc: Some(toc_info),
+        story: Some(content),
+    };
+
+    HttpResponse::Ok()
+        .json(data)
 }

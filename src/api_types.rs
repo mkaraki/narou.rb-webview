@@ -1,6 +1,7 @@
 use serde::{Serialize};
 use chrono::{DateTime, Utc};
 use crate::narou_parser::CommitInfo;
+use crate::narou_types::{NovelInfo, Story, Toc};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct ApiNovelList {
@@ -58,4 +59,11 @@ pub struct ApiElement {
     pub introduction: String,
     pub body: String,
     pub postscript: String,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct InspectNovel {
+    pub db_item: Option<NovelInfo>,
+    pub toc: Option<Toc>,
+    pub story: Option<Story>,
 }

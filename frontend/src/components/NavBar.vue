@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import {ref} from "vue";
 
+const searchQuery = ref('');
 </script>
 
 <template>
@@ -15,6 +17,10 @@
             <router-link to="/novels?sort=general_lastup&order=desc" class="nav-link">更新順一覧</router-link>
           </li>
         </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="searchQuery">
+          <router-link class="btn btn-outline-success" :to="`/novels?title_like=${encodeURI(searchQuery)}`" role="button">Search</router-link>
+        </form>
       </div>
     </div>
   </nav>
