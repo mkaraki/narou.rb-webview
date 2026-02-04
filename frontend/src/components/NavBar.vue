@@ -19,7 +19,7 @@ const searchQuery = ref('');
         </ul>
         <form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="searchQuery">
-          <router-link class="btn btn-outline-success" :to="`/novels?title_like=${encodeURI(searchQuery)}`" role="button">Search</router-link>
+          <router-link class="btn btn-outline-success" :to="`/novels?title_like=${encodeURIComponent(searchQuery)}`" role="button">Search</router-link>
         </form>
       </div>
     </div>

@@ -71,7 +71,7 @@ const urlGen = (endpoint: String, queryParams: Object = {}, baseQueryParams: URL
           <th scope="row"><router-link :to="urlGen(`/novels/${novel.id}`)">{{ novel.title }}</router-link></th>
           <td>{{ new Date(novel.general_lastup).toLocaleString() }}</td>
           <td>
-            <router-link :to="`/novels?author_exact=${encodeURI(novel.author)}`">{{ novel.author }}</router-link>
+            <router-link :to="`/novels?author_exact=${encodeURIComponent(novel.author)}`">{{ novel.author }}</router-link>
           </td>
           <td><a :href="novel.toc_url" target="_blank" rel="noopener noreferrer">{{ novel.sitename }}</a></td>
         </tr>
