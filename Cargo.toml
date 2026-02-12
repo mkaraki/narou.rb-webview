@@ -12,7 +12,9 @@ debug-assertions = false
 lto = "fat"
 
 [features]
-default = []
+default = [
+    "full-text",
+]
 full-text = [
     "tantivy",
     "lindera-tantivy",
