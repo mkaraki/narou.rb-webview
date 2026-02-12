@@ -22,7 +22,7 @@ full-text = [
 
 [dependencies]
 actix-web = { version= "4.12.1", default-features = false, features = ["macros", "unicode"] }
-git2 = { version = "0.20.3", default-features = false }
+git2 = { version = "0.20.4", default-features = false }
 sentry = { version = "0.46.1", default-features = false, features = ["actix", "tracing", "contexts", "panic", "reqwest", "rustls"] }
 tracing = "0.1.43"
 tracing-subscriber = "0.3.22"
