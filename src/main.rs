@@ -3,12 +3,18 @@ mod narou_parser;
 mod api_types;
 mod api_endpoint;
 
+#[cfg(feature = "full-text")]
+mod full_text;
+
+#[cfg(feature = "full-text")]
+mod full_text_novel;
+
 use crate::api_endpoint::*;
 
 use std::{env, io};
 use actix_files as fs;
 use actix_files::NamedFile;
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, App, HttpServer};
 use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
 use actix_web::middleware::DefaultHeaders;
 use tracing_subscriber::prelude::*;
@@ -37,6 +43,36 @@ fn main() -> io::Result<()> {
         }
     ));
 
+    println!("NAROU_ROOT: {}", get_narou_root());
+
+    let args: Vec<String> = env::args().collect();
+    if args.len() == 2 {
+        if args[1] == "index:all" {
+            println!("MODE: Index narou novels and stories");
+            #[cfg(feature = "full-text")]
+            actix_web::rt::System::new().block_on(async {
+                let _ = crate::full_text::index_all().await;
+                let _ = crate::full_text_novel::novel_index_all().await;
+            });
+        } else if args[1] == "index:novel" {
+            println!("MODE: Index narou novels");
+            #[cfg(feature = "full-text")]
+            actix_web::rt::System::new().block_on(async {
+                let _ = crate::full_text_novel::novel_index_all().await;
+            });
+        } else if args[1] == "index:story" {
+            println!("MODE: Index narou stories");
+            #[cfg(feature = "full-text")]
+            actix_web::rt::System::new().block_on(async {
+                let _ = crate::full_text::index_all().await;
+            });
+        } else {
+            eprintln!("Command not found");
+        }
+
+        return Ok(());
+    }
+
     unsafe {
         let res = git2::opts::set_verify_owner_validation(false);
         if res.is_err() {
@@ -44,9 +80,16 @@ fn main() -> io::Result<()> {
         }
     }
 
+    println!("Pre-opening stories index DB...");
+    #[cfg(feature = "full-text")]
+    let _ = crate::full_text::open_index();
+
+    println!("Pre-opening novels index DB...");
+    #[cfg(feature = "full-text")]
+    let _ = crate::full_text_novel::open_novel_index();
+
     let bind_addr = env::var("APP_BIND").unwrap_or("[::]:3001".to_string());
     println!("APP_BIND: {}", bind_addr);
-    println!("NAROU_ROOT: {}", get_narou_root());
 
     actix_web::rt::System::new().block_on(async {
         HttpServer::new(|| {
@@ -67,6 +110,10 @@ fn main() -> io::Result<()> {
                         .service(api_list_inspect)
                         .service(api_story_inspect)
                         .service(api_content_inspect)
+                        .service(api_index_search_story)
+                        .service(api_index_search_story_inspect)
+                        .service(api_index_search_novel)
+                        //.service(api_index_search_novel_inspect)
                 )
                 .service(
                     web::scope("/assets")

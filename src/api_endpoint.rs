@@ -3,7 +3,7 @@ use rayon::prelude::ParallelSliceMut;
 use serde::Deserialize;
 use crate::api_types::{ApiElement, ApiNovelInfo, ApiNovelList, ApiNovelRevision, ApiReaderInfo, ApiStories, ApiSubtitle, InspectNovel};
 use crate::narou_parser::{get_db_novel_info_by_id, load_content, load_index, load_toc_by_id, load_toc_histories};
-use crate::narou_types::{NovelInfo, Toc};
+use crate::narou_types::{NovelInfo};
 
 #[derive(Deserialize)]
 struct ApiListQueryParams {
@@ -15,6 +15,7 @@ struct ApiListQueryParams {
     author_like: Option<String>,
     author_exact: Option<String>,
     tag: Option<String>,
+    
 }
 
 async fn extract_api_list(query: web::Query<ApiListQueryParams>) -> Vec<NovelInfo> {
@@ -130,6 +131,7 @@ pub async fn api_story(path: web::Path<(u64,)>, query: web::Query<ApiStoryQueryP
             subdate: v.subdate.clone(),
             subupdate: v.subupdate.clone(),
             reader_info: None,
+            novel_info: None,
         }).collect(),
     };
 
@@ -202,6 +204,16 @@ pub async fn api_content(path: web::Path<(u64, u64)>, query: web::Query<ApiConte
     let story_id = path.1;
     let content = load_content(novel_id, story_id, None, None, Some(toc_info.clone()), commit_id).await.unwrap();
 
+    let mut introduction = content.element.introduction;
+    let mut body = content.element.body;
+    let mut postscript = content.element.postscript;
+
+    if content.element.data_type == "text" {
+        introduction = introduction.replace("\n", "<br />");
+        body = body.replace("\n", "<br />");
+        postscript = postscript.replace("\n", "<br />");
+    }
+
     let subtitle_info = ApiSubtitle {
         index: content.index.clone().parse::<u64>().unwrap(),
         chapter: content.chapter.clone(),
@@ -211,14 +223,15 @@ pub async fn api_content(path: web::Path<(u64, u64)>, query: web::Query<ApiConte
         subupdate: content.subupdate,
         reader_info: Some(ApiReaderInfo {
             element: ApiElement {
-                introduction: content.element.introduction.clone(),
-                body: content.element.body.clone(),
-                postscript: content.element.postscript.clone()
+                introduction: introduction.clone(),
+                body: body.clone(),
+                postscript: postscript.clone(),
             },
             novel_title: toc_info.title,
             novel_author: toc_info.author,
             novel_total_subtitles: toc_info.subtitles.len() as u64,
-        })
+        }),
+        novel_info: None,
     };
 
     HttpResponse::Ok()
@@ -246,4 +259,132 @@ pub async fn api_content_inspect(path: web::Path<(u64, u64)>, query: web::Query<
 
     HttpResponse::Ok()
         .json(data)
+}
+
+#[derive(Deserialize)]
+struct ApiFullTextSearchQueryParams {
+    query: Option<String>,
+}
+
+#[get("/search/story")]
+pub async fn api_index_search_story(query: web::Query<ApiFullTextSearchQueryParams>) -> impl Responder {
+    #[cfg(feature = "full-text")]
+    {
+        let query = query.query.clone();
+        let search_res = crate::full_text::index_search(&(query.unwrap_or("*".to_string()))).unwrap();
+
+        let mut result: Vec<ApiSubtitle> = Vec::new();
+
+        for res in search_res {
+            let novel_id = res.0;
+            let story_id = res.1;
+
+            let novel_info = get_db_novel_info_by_id(novel_id, None, None).await.unwrap();
+            let v = novel_info.clone();
+            let api_novel_info = ApiNovelInfo {
+                id: v.id,
+                title: v.title.clone(),
+                author: v.author.clone(),
+                general_lastup: v.general_lastup,
+                sitename: v.sitename.clone(),
+                toc_url: v.toc_url.clone(),
+            };
+
+            let toc_info = load_toc_by_id(novel_id, None, Some(novel_info.clone()), None).await.unwrap();
+            let v = &toc_info.subtitles[story_id as usize];
+
+            let data = ApiSubtitle {
+                index: v.index.clone().parse::<u64>().unwrap(),
+                chapter: v.chapter.clone(),
+                subchapter: v.subchapter.clone(),
+                subtitle: v.subtitle.clone(),
+                subdate: v.subdate.clone(),
+                subupdate: v.subupdate.clone(),
+                reader_info: None,
+                novel_info: Some(api_novel_info),
+            };
+
+            result.push(data);
+        }
+
+        HttpResponse::Ok()
+            .json(result)
+    }
+    #[cfg(not(feature = "full-text"))]
+    {
+        HttpResponse::BadRequest()
+            .body("This server isn't support full text search")
+    }
+}
+
+#[get("/inspect/search/story")]
+pub async fn api_index_search_story_inspect(query: web::Query<ApiFullTextSearchQueryParams>) -> impl Responder {
+    #[cfg(feature = "full-text")]
+    {
+        let query = query.query.clone();
+        let search_res = crate::full_text::index_search(&(query.unwrap_or("*".to_string()))).unwrap();
+
+        let mut result: Vec<InspectNovel> = Vec::new();
+
+        for res in search_res {
+            let novel_id = res.0;
+            let story_id = res.1;
+
+            let novel_info = get_db_novel_info_by_id(novel_id, None, None).await.unwrap();
+            let toc_info = load_toc_by_id(novel_id, None, Some(novel_info.clone()), None).await.unwrap();
+
+            let content = load_content(novel_id, story_id, None, Some(novel_info.clone()), Some(toc_info.clone()), None).await.unwrap();
+
+            let data = InspectNovel {
+                db_item: Some(novel_info),
+                toc: Some(toc_info),
+                story: Some(content),
+            };
+
+            result.push(data);
+        }
+
+        HttpResponse::Ok()
+            .json(result)
+    }
+    #[cfg(not(feature = "full-text"))]
+    {
+        HttpResponse::BadRequest()
+            .body("This server isn't support full text search")
+    }
+}
+
+#[get("/search/novel")]
+pub async fn api_index_search_novel(query: web::Query<ApiFullTextSearchQueryParams>) -> impl Responder {
+    #[cfg(feature = "full-text")]
+    {
+        let query = query.query.clone();
+        let search_res = crate::full_text_novel::novel_index_search(&(query.unwrap_or("*".to_string()))).unwrap();
+
+        let mut result: Vec<ApiNovelInfo> = Vec::new();
+
+        for res in search_res {
+            let novel_id = res;
+
+            let v = get_db_novel_info_by_id(novel_id, None, None).await.unwrap();
+            let data = ApiNovelInfo {
+                id: v.id,
+                title: v.title.clone(),
+                author: v.author.clone(),
+                general_lastup: v.general_lastup,
+                sitename: v.sitename.clone(),
+                toc_url: v.toc_url.clone(),
+            };
+
+            result.push(data);
+        }
+
+        HttpResponse::Ok()
+            .json(result)
+    }
+    #[cfg(not(feature = "full-text"))]
+    {
+        HttpResponse::BadRequest()
+            .body("This server isn't support full text search")
+    }
 }
