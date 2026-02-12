@@ -22,3 +22,6 @@ target
 
 # Debug data
 /data
+/data-index
+/data-index-novel
+/data-novel-index

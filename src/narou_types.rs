@@ -18,7 +18,7 @@ pub struct NovelInfo {
     pub novelupdated_at: DateTime<Utc>,
     pub general_lastup: DateTime<Utc>,
     pub length: Option<u64>,
-    pub suspend: bool,
+    pub suspend: Option<bool>,
     pub general_all_no: u64,
     pub tags: Option<Vec<String>>,
     pub last_check_date: Option<DateTime<Utc>>,
@@ -74,7 +74,7 @@ pub struct Story {
 /// Represents the nested 'element' object.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Element {
-    /// The type of data (e.g., "html").
+    /// The type of data (e.g., "html", "text").
     #[serde(rename = "data_type")]
     pub data_type: String,
     /// The introduction text (can be empty).

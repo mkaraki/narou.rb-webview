@@ -44,6 +44,9 @@ pub struct ApiSubtitle {
     pub subdate: String,
     pub subupdate: String,
     pub reader_info: Option<ApiReaderInfo>,
+
+    // This is for full-text search
+    pub novel_info: Option<ApiNovelInfo>,
 }
 
 #[derive(Debug, Clone, Serialize)]

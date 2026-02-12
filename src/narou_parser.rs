@@ -51,7 +51,12 @@ async fn load_yaml_bin(path: &str, commit_id: Option<&str>) -> Result<Vec<u8>, (
             load_yaml_bin_from_commit(path, commit_id)
         },
         None => {
-            let mut file = File::open(path).await.unwrap();
+            let file = File::open(path).await;
+            if file.is_err() {
+                eprintln!("Failed to open file: {}", path);
+                return Err(());
+            }
+            let mut file = file.unwrap();
             let mut buffer = Vec::new();
             file.read_to_end(&mut buffer).await.unwrap();
             Ok(buffer)
@@ -109,8 +114,16 @@ pub async fn load_toc_by_id(id: u64, loaded_index: Option<Vec<NovelInfo>>, novel
     let toc_path = get_toc_path(id, loaded_index, novel_info, commit_id).await.unwrap();
     let toc_path = toc_path.to_str().unwrap();
 
-    let yaml_bin = load_yaml_bin(&*toc_path, commit_id).await.unwrap();
-    let toc: Toc = serde_saphyr::from_slice(yaml_bin.as_slice()).unwrap();
+    let yaml_bin = load_yaml_bin(&*toc_path, commit_id).await;
+    if yaml_bin.is_err() {
+        return Err(());
+    }
+    let yaml_bin = yaml_bin.unwrap();
+    let toc: Result<Toc, serde_saphyr::Error> = serde_saphyr::from_slice(yaml_bin.as_slice());
+    if toc.is_err() {
+        return Err(());
+    }
+    let toc = toc.unwrap();
 
     Ok(toc)
 }
@@ -182,7 +195,7 @@ pub async fn load_toc_histories(id: u64, loaded_index: Option<Vec<NovelInfo>>, n
 }
 
 #[tracing::instrument]
-pub async fn load_content(novel_id: u64, story_id: u64, loaded_index: Option<Vec<NovelInfo>>, novel_info: Option<NovelInfo>, loaded_toc: Option<Toc>, commit_id: Option<&str>) -> Result<Story, ()> {
+pub async fn get_content_path(novel_id: u64, story_id: u64, loaded_index: Option<Vec<NovelInfo>>, novel_info: Option<NovelInfo>, loaded_toc: Option<Toc>, commit_id: Option<&str>) -> Result<String, ()> {
     let narou_root = get_narou_root();
     let narou_path = Path::new(&narou_root);
 
@@ -212,8 +225,29 @@ pub async fn load_content(novel_id: u64, story_id: u64, loaded_index: Option<Vec
     let novel_content_path = novel_content_dir.join(format!("{} {}.yaml", subtitle.index, subtitle.file_subtitle));
     let novel_content_path = novel_content_path.to_str().unwrap();
 
-    let yaml_bin = load_yaml_bin(&*novel_content_path, commit_id).await.unwrap();
-    let story: Story = serde_saphyr::from_slice(yaml_bin.as_slice()).unwrap();
+    Ok(novel_content_path.to_string())
+}
+
+
+#[tracing::instrument]
+pub async fn load_content(novel_id: u64, story_id: u64, loaded_index: Option<Vec<NovelInfo>>, novel_info: Option<NovelInfo>, loaded_toc: Option<Toc>, commit_id: Option<&str>) -> Result<Story, ()> {
+    let novel_content_path = get_content_path(novel_id, story_id, loaded_index, novel_info, loaded_toc, commit_id).await;
+    if novel_content_path.is_err() {
+        return Err(());
+    }
+    let novel_content_path = novel_content_path.unwrap();
+
+    let yaml_bin = load_yaml_bin(&*novel_content_path, commit_id).await;
+    if yaml_bin.is_err() {
+        return Err(())
+    }
+    let yaml_bin = yaml_bin.unwrap();
+    let story: Result<Story, serde_saphyr::Error> = serde_saphyr::from_slice(yaml_bin.as_slice());
+    if story.is_err() {
+        // Errors like: invalid indentation in quoted scalar
+        return Err(());
+    }
+    let story = story.unwrap();
 
     Ok(story)
 }
