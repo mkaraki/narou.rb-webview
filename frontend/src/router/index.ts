@@ -5,6 +5,9 @@ const Stories = () => import('../pages/Stories.vue');
 const Revisions = () => import('../pages/Revisions.vue');
 const Story = () => import('../pages/Story.vue');
 
+const NovelSearch = () => import('../pages/NovelSearch.vue');
+const StorySearch = () => import('../pages/StorySearch.vue');
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -31,6 +34,16 @@ const router = createRouter({
         query: new URLSearchParams(Array.from(Object.entries(route.query).values()).map((v: any) => [v[0], v[1] as string])),
         novel_id: route.params.novel_id,
         story_id: route.params.story_id,
+      }),
+    },
+    {
+      path: '/search/novel', component: NovelSearch, props: route => ({
+        query: new URLSearchParams(Array.from(Object.entries(route.query).values()).map((v: any) => [v[0], v[1] as string])),
+      }),
+    },
+    {
+      path: '/search/story', component: StorySearch, props: route => ({
+        query: new URLSearchParams(Array.from(Object.entries(route.query).values()).map((v: any) => [v[0], v[1] as string])),
       }),
     },
   ],
