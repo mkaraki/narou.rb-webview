@@ -15,7 +15,8 @@ const state = ref(0);
 const data: Ref<any> = ref({});
 
 const funcOnBeforeMount = () => {
-  state.value = 0;
+  if (state.value !== 2)
+    state.value = 0;
   fetch(`/api/novels/${props?.novel_id}/subtitles?${props.query?.toString()}`, {
   })
       .then(v => v.json())

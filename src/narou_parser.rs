@@ -121,6 +121,7 @@ pub async fn load_toc_by_id(id: u64, loaded_index: Option<Vec<NovelInfo>>, novel
     let yaml_bin = yaml_bin.unwrap();
     let toc: Result<Toc, serde_saphyr::Error> = serde_saphyr::from_slice(yaml_bin.as_slice());
     if toc.is_err() {
+        eprintln!("toc yaml parse error: {}", toc.unwrap_err());
         return Err(());
     }
     let toc = toc.unwrap();
@@ -245,6 +246,7 @@ pub async fn load_content(novel_id: u64, story_id: u64, loaded_index: Option<Vec
     let story: Result<Story, serde_saphyr::Error> = serde_saphyr::from_slice(yaml_bin.as_slice());
     if story.is_err() {
         // Errors like: invalid indentation in quoted scalar
+        eprintln!("Failed to parse content: {}", story.unwrap_err());
         return Err(());
     }
     let story = story.unwrap();

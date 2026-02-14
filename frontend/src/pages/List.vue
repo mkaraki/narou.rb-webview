@@ -3,6 +3,10 @@ import {onBeforeMount, type Ref, ref, watch} from "vue";
 import LoadingSpin from "@/components/LoadingSpin.vue";
 import FetchOops from "@/components/FetchOops.vue";
 
+defineOptions({
+  name: 'List'
+});
+
 const props = defineProps({
   query: URLSearchParams
 });
@@ -14,7 +18,9 @@ const state = ref(0);
 const data: Ref<any> = ref({});
 
 const funcOnBeforeMount = () => {
-  state.value = 0;
+  if (state.value !== 2)
+    state.value = 0;
+
   fetch(`/api/novels?${props.query?.toString()}`, {
   })
       .then(v => v.json())

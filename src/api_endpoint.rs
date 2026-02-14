@@ -117,7 +117,12 @@ pub async fn api_story(path: web::Path<(u64,)>, query: web::Query<ApiStoryQueryP
     let path = path.into_inner();
     let novel_id = path.0;
     let commit_id: Option<&str> = if query.commit_id.is_some() { Some(query.commit_id.as_ref().unwrap()) } else { None };
-    let toc = load_toc_by_id(novel_id, None, None, commit_id).await.unwrap();
+    let toc = load_toc_by_id(novel_id, None, None, commit_id).await;
+    if toc.is_err() {
+        eprintln!("Failed to load toc: {}", novel_id);
+        return HttpResponse::InternalServerError().body("Failed to load toc");
+    }
+    let toc = toc.unwrap();
 
     let data = ApiStories {
         title: toc.title.clone(),
@@ -202,7 +207,12 @@ pub async fn api_content(path: web::Path<(u64, u64)>, query: web::Query<ApiConte
     let toc_info = load_toc_by_id(novel_id, None, None, commit_id).await.unwrap();
 
     let story_id = path.1;
-    let content = load_content(novel_id, story_id, None, None, Some(toc_info.clone()), commit_id).await.unwrap();
+    let content = load_content(novel_id, story_id, None, None, Some(toc_info.clone()), commit_id).await;
+    if content.is_err() {
+        eprintln!("Failed to parse content: {} in novel {}", story_id, novel_id);
+        return HttpResponse::InternalServerError().body("Failed to parse content");
+    }
+    let content = content.unwrap();
 
     let mut introduction = content.element.introduction;
     let mut body = content.element.body;
