@@ -38,7 +38,7 @@ pub struct Toc {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Subtitle {
     pub index: String, // YAMLでは '1' とクォートされているためStringにします
-    pub href: String,
+    pub href: Option<String>,
     pub chapter: Option<String>,
     pub subchapter: Option<String>,
     pub subtitle: String,
@@ -53,7 +53,7 @@ pub struct Story {
     /// The index, represented as a string.
     pub index: String,
     /// The corresponding HTML file.
-    pub href: String,
+    pub href: Option<String>,
     /// The main chapter title.
     pub chapter: Option<String>,
     /// The subchapter title (can be empty).

@@ -7,7 +7,11 @@ import NavBar from "@/components/NavBar.vue";
 
 <template>
   <NavBar />
-  <router-view />
+  <router-view v-slot="{ Component }">
+    <keep-alive :include="['List', 'NovelSearch', 'Revisions', 'Stories', 'Story', 'StorySearch']">
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
 </template>
 
 <style scoped></style>
