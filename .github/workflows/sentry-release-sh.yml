@@ -1,0 +1,24 @@
+name: Sentry Release (Self-hosted)
+
+on:
+  push:
+    branches: ["master"]
+
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v3
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN_SELF_HOSTED }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_URL: ${{ secrets.SENTRY_URL_SELF_HOSTED }}
+        with:
+          environment: production
+          projects: "narourb-webview"
