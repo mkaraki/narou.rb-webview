@@ -12,7 +12,7 @@ pub struct NovelInfo {
     pub novel_type: u64,
     pub end: bool,
     pub last_update: DateTime<Utc>,
-    pub new_arrivals_date: DateTime<Utc>,
+    pub new_arrivals_date: Option<DateTime<Utc>>,
     pub use_subdirectory: bool,
     pub general_firstup: DateTime<Utc>,
     pub novelupdated_at: DateTime<Utc>,

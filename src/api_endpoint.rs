@@ -33,7 +33,7 @@ async fn extract_api_list(query: web::Query<ApiListQueryParams>) -> Vec<NovelInf
             "novel_type" => data.par_sort_by_key(|v| v.novel_type),
             "end" => data.par_sort_by_key(|v| v.end),
             "last_update" => data.par_sort_by_key(|v| v.last_update),
-            "new_arrivals_date" => data.par_sort_by_key(|v| v.new_arrivals_date),
+            "new_arrivals_date" => data.par_sort_by_key(|v| v.new_arrivals_date.unwrap_or_default()),
             "use_subdirectory" => data.par_sort_by_key(|v| v.use_subdirectory),
             "general_firstup" => data.par_sort_by_key(|v| v.general_firstup),
             "novelupdated_at" => data.par_sort_by_key(|v| v.novelupdated_at),
