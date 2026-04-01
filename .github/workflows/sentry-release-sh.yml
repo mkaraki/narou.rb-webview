@@ -2,7 +2,7 @@ name: Sentry Release (Self-hosted)
 
 on:
   push:
-    branches: ["master"]
+    branches: ["main"]
 
 permissions:
   contents: read
