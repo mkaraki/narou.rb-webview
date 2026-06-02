@@ -34,6 +34,10 @@ header nav a:visited {
   color: black;
 }
 
+ul.pagination {
+  flex-wrap: wrap;
+}
+
 pre.novel-story {
   white-space: pre-wrap;
 }
