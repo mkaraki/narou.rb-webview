@@ -1,0 +1,34 @@
+<% include!("part/html_start.html.stpl"); %>
+<main>
+  <div class="container p-4 read-container">
+    <% let reader_info = &self.reader_info.unwrap(); %>
+    <div class="row">
+      <div class="col">
+        <div class="text-center">
+          <div class="novel-title"><%= &reader_info.novel_title %></div>
+          <div class="novel-info"><%= &self.chapter.unwrap_or("".to_string()) %></div>
+          <div class="novel-info"><%= &self.subchapter.unwrap_or("".to_string()) %></div>
+          <div class="novel-info"><%= &self.subtitle %></div>
+        </div>
+        <div class="text-end">
+          <%= &reader_info.novel_author %>
+        </div>
+        <hr />
+      </div>
+      <% include!("part/story_reader_page_controller.html.stpl"); %>
+      <div class="row">
+        <div class="col">
+          <hr />
+          <div class="novelview novelintro biz-udpmincho-regular"><%- &reader_info.element.introduction %></div>
+          <hr />
+          <div class="novelview body biz-udpmincho-regular"><%- &reader_info.element.body %></div>
+          <hr />
+          <div class="novelview novelpost biz-udpmincho-regular"><%- &reader_info.element.postscript %></div>
+          <hr />
+        </div>
+      </div>
+    </div>
+    <% include!("part/story_reader_page_controller.html.stpl"); %>
+  </div>
+</main>
+<% include!("part/html_end.html.stpl"); %>

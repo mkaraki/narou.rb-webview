@@ -1,0 +1,28 @@
+<% include!("part/html_start.html.stpl"); %>
+<main>
+	<table class="table table-striped">
+		<thead>
+      <tr>
+        <th>タイトル</th>
+        <th>更新日</th>
+        <th>作者</th>
+        <th>掲載サイト</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% for novel in &self.novels { %>
+        <tr>
+          <th scope="row"><a href="/novels/<%= novel.id %>" class="urlgen-novel-link" data-novel-id="<%= novel.id %>"><%= novel.title %></a></th>
+          <td class="format-time" data-time="<%= novel.general_lastup %>"><%= novel.general_lastup %></td>
+          <td>
+            <a href="/novels?author_exact=<%= novel.author %>" class="urlgen-author-search" data-author="<%= novel.author %>"><%= novel.author %></a>
+          </td>
+          <td><a href="<%= novel.toc_url %>" target="_blank" rel="noopener noreferrer"><%= novel.sitename %></a></td>
+        </tr>
+        <% } %>
+    </tbody>
+	</table>
+	全 <%= self.total %>件
+  <% include!("part/pagination.html.stpl"); %>
+</main>
+<% include!("part/html_end.html.stpl"); %>

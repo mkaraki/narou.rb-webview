@@ -13,7 +13,7 @@ lto = "fat"
 
 [features]
 default = [
-    "full-text",
+    "full-text"
 ]
 full-text = [
     "tantivy",
@@ -39,3 +39,4 @@ tantivy = { version = "0.25.0", optional = true }
 lindera-tantivy = { version = "2.0.0", features = ["embed-ipadic-neologd"], optional = true }
 html2text = { version = "0.16.7", optional = true }
 lindera = { version = "2.2.0", features = ["embed-ipadic-neologd"], optional = true }
+sailfish = "0.11.1"

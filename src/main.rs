@@ -2,20 +2,21 @@ mod narou_types;
 mod narou_parser;
 mod api_types;
 mod api_endpoint;
+mod frontend;
 
 #[cfg(feature = "full-text")]
 mod full_text;
 
 #[cfg(feature = "full-text")]
 mod full_text_novel;
+mod frontend_templates;
 
 use crate::api_endpoint::*;
+use crate::frontend::*;
 
 use std::{env, io};
 use actix_files as fs;
-use actix_files::NamedFile;
 use actix_web::{web, App, HttpServer};
-use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
 use actix_web::middleware::DefaultHeaders;
 use tracing_subscriber::prelude::*;
 use crate::narou_parser::get_narou_root;
@@ -100,6 +101,13 @@ fn main() -> io::Result<()> {
                         .start_transaction(true) // Start a transaction (Sentry root span) for each request
                         .finish(),
                 )
+                .service(frontend_index)
+                .service(frontend_list)
+                .service(frontend_story)
+                .service(frontend_content)
+                .service(frontend_novel_revision)
+                .service(frontend_index_search_novel)
+                .service(frontend_index_search_story)
                 .service(
                     web::scope("/api")
                         // Default is 404
@@ -118,7 +126,7 @@ fn main() -> io::Result<()> {
                 .service(
                     web::scope("/assets")
                         .default_service(
-                            fs::Files::new("/", "./frontend/dist/assets")
+                            fs::Files::new("/", "./frontend/dist/")
                                 .prefer_utf8(true)
                                 .use_etag(true)
                                 .use_last_modified(true)
@@ -127,20 +135,6 @@ fn main() -> io::Result<()> {
                             DefaultHeaders::new()
                                 .add(("Cache-Control", "public, max-age=31536000"))
                         )
-                )
-                .service(
-                     fs::Files::new("/", "./frontend/dist")
-                         .prefer_utf8(true)
-                         .index_file("index.html")
-                         .use_etag(true)
-                         .use_last_modified(true)
-                         .default_handler(fn_service(|req: ServiceRequest| async {
-                             let (req, _) = req.into_parts();
-                             // For SPA application
-                             let file = NamedFile::open_async("./frontend/dist/index.html").await?;
-                             let res = file.into_response(&req);
-                             Ok(ServiceResponse::new(req, res))
-                         }))
                 )
         })
             .bind(bind_addr)?

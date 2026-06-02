@@ -1,0 +1,59 @@
+<% include!("part/html_start.html.stpl"); %>
+<main>
+  <div class="container p-4">
+    <div class="row">
+      <div class="col">
+        <div class="text-center">
+          <h1><%= &self.title %></h1>
+        </div>
+        <div class="text-end"><%= &self.author %></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <pre class="novel-story biz-udpmincho-regular"><%= &self.story %></pre>
+      </div>
+    </div>
+  </div>
+	<table class="table table-striped">
+		<thead>
+      <tr>
+        <th>タイトル</th>
+        <th>掲載日</th>
+        <th>更新日</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% for (id, subtitle) in self.subtitles.iter().enumerate() { %>
+          <% if let Some(chapter) = &subtitle.chapter && !chapter.is_empty() { %>
+            <tr>
+              <td colspan="3"><b><%= chapter %></b></td>
+            </tr>
+          <% } %>
+          <% if let Some(subchapter) = &subtitle.subchapter && !subchapter.is_empty() { %>
+            <tr>
+              <td colspan="3"><b><%= subchapter %></b></td>
+            </tr>
+          <% } %>
+          <tr>
+            <th scope="row">
+              <a href="/novels/<%= self.novel_id %>/subtitles/<%= id %>"
+                 data-novel-id="<%= self.novel_id %>"
+                 data-subtitle-id="<%= id %>"
+                 class="urlgen-subtitles-link">
+                <%= &subtitle.subtitle %>
+              </a>
+            </th>
+            <td><%= subtitle.subdate %></td>
+            <td><%= subtitle.subupdate %></td>
+          </tr>
+        <% } %>
+    </tbody>
+	</table>
+	全 <%= self.total %>話
+  <% include!("part/pagination.html.stpl"); %>
+  <div>
+    <a href="/novels/<%= self.novel_id %>/revisions">過去ログを見る</a>
+  </div>
+</main>
+<% include!("part/html_end.html.stpl"); %>

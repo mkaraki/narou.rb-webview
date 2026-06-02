@@ -1,0 +1,53 @@
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+.novelview p {
+  margin: 0;
+}
+
+a:visited {
+  color: palevioletred;
+}
+
+.loadscr {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -100;
+}
+
+.read-container {
+  max-width: 700px;
+}
+
+h1, h2, h3 {
+  > small.heading-prefix {
+    display: block;
+    font-weight: bold;
+    font-size: 12pt;
+    text-transform: uppercase;
+  }
+}
+
+header nav a:visited {
+  color: black;
+}
+
+pre.novel-story {
+  white-space: pre-wrap;
+}
+
+/* ToDo: Check each OS's default fonts for fallback */
+
+.biz-udpmincho-regular {
+  font-family: "BIZ UDPMincho", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.biz-udpgothic-regular {
+  font-family: "BIZ UDPGothic", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}

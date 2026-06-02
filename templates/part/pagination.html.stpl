@@ -1,0 +1,23 @@
+<div>
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item <% if self.page == 1 { %>disabled<% } %>">
+        <a class="page-link urlgen-page" href="?p=<%= self.page - 1 %>" data-page="<%= self.page - 1 %>">
+          Previous
+        </a>
+      </li>
+      <% for i in 1..((self.total / 100) + 2) { %>
+      <li class="page-item <% if self.page == i { %>active<% } %>">
+        <a class="page-link urlgen-page" href="?p=<%= i %>" data-page="<%= i %>">
+          <%= i %>
+        </a>
+      </li>
+      <% } %>
+      <li class="page-item">
+        <a class="page-link urlgen-page" href="?p=<%= self.page + 1 %>" data-page="<%= self.page + 1 %>">
+          Next
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

@@ -1,32 +1,18 @@
 {
-  "name": "narourb-webview-frontend",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-  },
+  "name": "frontend",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "watch:ts": "tsc -w",
+    "watch:css": "sass --watch src:dist",
+    "build": "tsc && sass src:dist --style compressed"
+  },
+  "type": "module",
+  "devDependencies": {
+    "sass": "^1.100.0",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
-    "bootstrap": "5.3.8",
-    "vue": "^3.5.31",
-    "vue-router": "^5.0.4"
-  },
-  "devDependencies": {
-    "@tsconfig/node22": "^22.0.5",
-    "@types/bootstrap": "^5.2.10",
-    "@types/node": "^25.5.0",
-    "@vitejs/plugin-vue": "^6.0.5",
-    "@vue/tsconfig": "^0.9.1",
-    "npm-run-all2": "^8.0.4",
-    "sass": "^1.98.0",
-    "typescript": "~6.0.2",
-    "vite": "^8.0.5",
-    "vite-plugin-vue-devtools": "^8.1.1",
-    "vue-tsc": "^3.2.6"
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8"
   }
 }
