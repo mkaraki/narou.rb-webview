@@ -27,7 +27,7 @@
             </a>
           </th>
           <td><%= revision.commit_message %></td>
-          <td class="format-date" data-time="<%= revision.commit_date %>"><%= revision.commit_date %></td>
+          <td class="format-time" data-time="<%= revision.commit_date %>"><%= revision.commit_date %></td>
         </tr>
       <% } %>
     </tbody>
