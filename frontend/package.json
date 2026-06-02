@@ -6,7 +6,6 @@
     "watch:css": "sass --watch src:dist",
     "build": "tsc && sass src:dist --style compressed"
   },
-  "packageManager": "pnpm@11.0.9",
   "type": "module",
   "devDependencies": {
     "sass": "^1.100.0",
