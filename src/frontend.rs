@@ -1,11 +1,10 @@
-use actix_web::{get, web, HttpResponse, HttpResponseBuilder, Responder};
-use sailfish::{TemplateOnce, TemplateSimple};
-use serde::Deserialize;
-use crate::api_types::{ApiElement, ApiNovelInfo, ApiNovelList, ApiNovelRevision, ApiReaderInfo, ApiStories, ApiSubtitle, InspectNovel};
-use crate::narou_parser::{get_db_novel_info_by_id, load_content, load_index, load_toc_by_id, load_toc_histories};
-use crate::narou_types::{NovelInfo};
 use crate::api_endpoint::{extract_api_list, ApiFullTextSearchQueryParams, ApiListQueryParams};
+use crate::api_types::{ApiElement, ApiReaderInfo, ApiSubtitle};
 use crate::frontend_templates::*;
+use crate::narou_parser::{get_db_novel_info_by_id, load_content, load_toc_by_id, load_toc_histories};
+use actix_web::{get, web, HttpResponse, Responder};
+use sailfish::TemplateOnce;
+use serde::Deserialize;
 
 #[get("/")]
 pub async fn frontend_index() -> impl Responder {
@@ -48,7 +47,7 @@ pub async fn frontend_list(query: web::Query<ApiListQueryParams>) -> impl Respon
 struct FrontendStoryQueryParams {
     commit_id: Option<String>,
     // Note: frontend not supported.
-    order: Option<String>,
+    //order: Option<String>,
     p: Option<u64>,
 }
 
@@ -140,8 +139,6 @@ pub async fn frontend_content(path: web::Path<(u64, u64)>, query: web::Query<cra
         chapter: content.chapter.clone(),
         subchapter: content.subchapter,
         subtitle: content.subtitle.clone(),
-        subdate: content.subdate.clone(),
-        subupdate: content.subupdate,
         reader_info: Some(reader_info),
     };
 
@@ -249,11 +246,7 @@ pub async fn frontend_index_search_story(query: web::Query<crate::api_endpoint::
 
             let data = FrontendSubtitleSearchResult {
                 index: v.index.clone().parse::<u64>().unwrap(),
-                chapter: v.chapter.clone(),
-                subchapter: v.subchapter.clone(),
                 subtitle: v.subtitle.clone(),
-                subdate: v.subdate.clone(),
-                subupdate: v.subupdate.clone(),
                 novel_info: fe_novel_info,
             };
 

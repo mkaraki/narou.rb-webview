@@ -14,8 +14,7 @@ pub(crate) struct ApiListQueryParams {
     title_like: Option<String>,
     author_like: Option<String>,
     author_exact: Option<String>,
-    tag: Option<String>,
-    
+    //tag: Option<String>,
 }
 
 pub(crate) async fn extract_api_list(query: web::Query<ApiListQueryParams>) -> Vec<NovelInfo> {
@@ -109,7 +108,7 @@ pub async fn api_list_inspect(query: web::Query<ApiListQueryParams>) -> impl Res
 struct ApiStoryQueryParams {
     commit_id: Option<String>,
     // Note: frontend not supported.
-    order: Option<String>,
+    //order: Option<String>,
 }
 
 #[get("/novels/{novelId}/subtitles")]

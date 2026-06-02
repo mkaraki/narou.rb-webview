@@ -16,9 +16,7 @@ use crate::frontend::*;
 
 use std::{env, io};
 use actix_files as fs;
-use actix_files::NamedFile;
 use actix_web::{web, App, HttpServer};
-use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
 use actix_web::middleware::DefaultHeaders;
 use tracing_subscriber::prelude::*;
 use crate::narou_parser::get_narou_root;

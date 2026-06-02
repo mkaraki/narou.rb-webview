@@ -44,8 +44,6 @@ pub struct StoryTemplate {
     pub(crate) chapter: Option<String>,
     pub(crate) subchapter: Option<String>,
     pub(crate) subtitle: String,
-    pub(crate) subdate: String,
-    pub(crate) subupdate: String,
     pub(crate) reader_info: Option<ApiReaderInfo>,
 }
 
@@ -76,11 +74,7 @@ pub struct NovelSearchTemplate {
 #[derive(Debug, Clone)]
 pub struct FrontendSubtitleSearchResult {
     pub index: u64,
-    pub chapter: Option<String>,
-    pub subchapter: Option<String>,
     pub subtitle: String,
-    pub subdate: String,
-    pub subupdate: String,
     pub novel_info: FrontendNovelInfo,
 }
 
