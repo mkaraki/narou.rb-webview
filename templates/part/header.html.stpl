@@ -1,0 +1,24 @@
+<header>
+  <nav class="navbar navbar-expand-lg">
+    <div class=" container-fluid">
+      <a class="navbar-brand" href="/novels">Narou.rb Web Viewer</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li>
+          <a href="/novels?sort=general_lastup&order=desc" class="nav-link">更新順一覧</a>
+        </li>
+      </ul>
+      <form class="d-flex" action="/novels" method="get" id="global-search" onsubmit="return false">
+        <select class="form-select" id="global-search-type">
+          <option value="title-grep">作品名検索</option>
+          <option value="author-grep">作者名検索</option>
+          <% #[cfg(feature = "full-text")] { %>
+          <option value="novel-index">作品検索</option>
+          <option value="story-index">話検索</option>
+          <% } %>
+        </select>
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="global-search-query">
+        <button class="btn btn-outline-success" type="submit">検索</button>
+      </form>
+    </div>
+  </nav>
+</header>

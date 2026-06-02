@@ -1,0 +1,39 @@
+<% include!("part/html_start.html.stpl"); %>
+<main>
+  <div class="container p-4">
+    <div class="row">
+      <div class="col">
+        <div class="text-center">
+          <h1><small class="heading-prefix">Revisions of</small> <%= &self.title %></h1>
+        </div>
+        <div class="text-end"><%= &self.author %></div>
+      </div>
+    </div>
+  </div>
+	<table data-toggle="table" class="table table-striped">
+    <thead>
+    <tr>
+      <th>コミットID</th>
+      <th>コミットメッセージ</th>
+      <th>コミット日</th>
+    </tr>
+    </thead>
+    <tbody>
+      <% for (id, revision) in self.revisions.iter().enumerate() { %>
+        <tr>
+          <th scope="row">
+            <a href="/novels/<%= &self.novel_id %>?commit_id=<%= &revision.commit_id %>">
+              <%= revision.commit_id %>
+            </a>
+          </th>
+          <td><%= revision.commit_message %></td>
+          <td class="format-date" data-time="<%= revision.commit_date %>"><%= revision.commit_date %></td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <div>
+    全<%= &self.revisions.len() %>件
+  </div>
+</main>
+<% include!("part/html_end.html.stpl"); %>

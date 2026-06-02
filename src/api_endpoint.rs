@@ -6,9 +6,9 @@ use crate::narou_parser::{get_db_novel_info_by_id, load_content, load_index, loa
 use crate::narou_types::{NovelInfo};
 
 #[derive(Deserialize)]
-struct ApiListQueryParams {
-    p: Option<u64>,
-    commit_id: Option<String>,
+pub(crate) struct ApiListQueryParams {
+    pub(crate) p: Option<u64>,
+    pub(crate) commit_id: Option<String>,
     sort: Option<String>,
     order: Option<String>,
     title_like: Option<String>,
@@ -18,7 +18,7 @@ struct ApiListQueryParams {
     
 }
 
-async fn extract_api_list(query: web::Query<ApiListQueryParams>) -> Vec<NovelInfo> {
+pub(crate) async fn extract_api_list(query: web::Query<ApiListQueryParams>) -> Vec<NovelInfo> {
     let commit_id: Option<&str> = if query.commit_id.is_some() { Some(query.commit_id.as_ref().unwrap()) } else { None };
 
     let mut data: Vec<NovelInfo> = load_index(commit_id).await.unwrap();
@@ -193,8 +193,8 @@ pub async fn api_novel_revision(path: web::Path<(u64, )>) -> impl Responder {
 }
 
 #[derive(Deserialize)]
-struct ApiContentQueryParams {
-    commit_id: Option<String>,
+pub(crate) struct ApiContentQueryParams {
+    pub(crate) commit_id: Option<String>,
 }
 
 #[get("/novels/{novelId}/subtitles/{storyId}")]
@@ -272,8 +272,8 @@ pub async fn api_content_inspect(path: web::Path<(u64, u64)>, query: web::Query<
 }
 
 #[derive(Deserialize)]
-struct ApiFullTextSearchQueryParams {
-    query: Option<String>,
+pub(crate) struct ApiFullTextSearchQueryParams {
+    pub(crate) query: Option<String>,
 }
 
 #[get("/search/story")]

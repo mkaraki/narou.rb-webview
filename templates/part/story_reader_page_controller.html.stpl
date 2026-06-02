@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-4 text-center">
+    <% if self.story_id > 0 { %>
+    <a href="/novels/<%= self.novel_id %>/subtitles/<%= self.story_id %>"
+       class="urlgen-subtitles-link"
+       data-novel-id="<%= self.novel_id %>"
+       data-subtitle-id="<%= self.story_id - 1 %>">
+       前話
+    </a>
+    <% } %>
+  </div>
+  <div class="col-4 text-center">
+    <a href="/novels/<%= self.novel_id %>"
+       class="urlgen-novel-link"
+       data-novel-id="<%= self.novel_id %>">
+      目次
+    </a>
+  </div>
+  <div class="col-4 text-center">
+    <% if self.story_id < self.total_story_no { %>
+    <a href="/novels/<%= self.novel_id %>/subtitles/<%= self.story_id %>"
+       class="urlgen-subtitles-link"
+       data-novel-id="<%= self.novel_id %>"
+       data-subtitle-id="<%= self.story_id + 1 %>">
+       前話
+    </a>
+    <% } %>
+  </div>
+</div>

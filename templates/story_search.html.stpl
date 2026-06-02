@@ -1,0 +1,41 @@
+<% include!("part/html_start.html.stpl"); %>
+<main>
+  <table data-toggle="table" class="table table-striped">
+    <thead>
+    <tr>
+      <th>話タイトル/章節情報</th>
+      <th>作品名/作者</th>
+    </tr>
+    </thead>
+    <tbody>
+      <% for story in &self.data { %>
+      <tr>
+        <th scope="row">
+          <a href="/novels/<%= story.novel_info.id %>/subtitles/<%= story.index - 1 %>"
+             class="urlgen-subtitles-link"
+             data-novel-id="<%= story.novel_info.id %>"
+             data-subtitle-id="<%= story.index - 1 %>">
+            <%= story.subtitle %>
+          </a>
+        </th>
+        <td>
+          <a href="/novels/<%= story.novel_info.id %>"
+             class="urlgen-novel-link"
+             data-novel-id="<%= story.novel_info.id %>">
+            <%= story.novel_info.title %>
+          </a><br />
+          <small>
+            <a href="/novels?author_exact=<%= story.novel_info.author %>"
+               class="urlgen-author-search"
+               data-author="<%= story.novel_info.author %>">
+              <%= story.novel_info.author %>
+            </a>
+          </small>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <div>検索上位<%= &self.data.len() %>件を表示中</div>
+</main>
+<% include!("part/html_end.html.stpl"); %>
