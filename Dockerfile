@@ -22,6 +22,7 @@ RUN apk update &&\
 COPY Cargo.lock Cargo.toml /app/
 
 COPY src /app/src
+COPY templates /app/templates
 RUN cargo build --release --target=x86_64-unknown-linux-musl --bin narourb_webview
 
 FROM scratch
