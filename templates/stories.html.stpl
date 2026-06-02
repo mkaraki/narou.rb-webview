@@ -47,7 +47,6 @@
             <td><%= subtitle.subdate %></td>
             <td><%= subtitle.subupdate %></td>
           </tr>
-        </tr>
         <% } %>
     </tbody>
 	</table>
