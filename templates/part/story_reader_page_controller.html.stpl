@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-4 text-center">
     <% if self.story_id > 0 { %>
-    <a href="/novels/<%= self.novel_id %>/subtitles/<%= self.story_id %>"
+    <a href="/novels/<%= self.novel_id %>/subtitles/<%= self.story_id - 1 %>"
        class="urlgen-subtitles-link"
        data-novel-id="<%= self.novel_id %>"
        data-subtitle-id="<%= self.story_id - 1 %>">
@@ -18,7 +18,7 @@
   </div>
   <div class="col-4 text-center">
     <% if self.story_id < self.total_story_no { %>
-    <a href="/novels/<%= self.novel_id %>/subtitles/<%= self.story_id %>"
+    <a href="/novels/<%= self.novel_id %>/subtitles/<%= self.story_id + 1 %>"
        class="urlgen-subtitles-link"
        data-novel-id="<%= self.novel_id %>"
        data-subtitle-id="<%= self.story_id + 1 %>">
