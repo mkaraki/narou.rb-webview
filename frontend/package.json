@@ -9,7 +9,7 @@
   "type": "module",
   "devDependencies": {
     "sass": "^1.100.0",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
